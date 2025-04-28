@@ -11,6 +11,8 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Filter } from "lucide-react";
+import { SubscribeDialog } from "@/components/subscription/SubscribeDialog";
+import { Toaster } from "@/components/ui/toaster";
 
 const ProductsPage: NextPage = () => {
   return (
@@ -22,10 +24,15 @@ const ProductsPage: NextPage = () => {
 
       <div className="container mx-auto px-4 py-8 flex-1">
         <section className="mb-4">
-          <h1 className="text-4xl font-bold mb-4">AI 产品追踪</h1>
-          <p className="text-muted-foreground text-lg mb-2">
-            追踪 AI 产品的更新、变化和重要事件
-          </p>
+          <div className="flex items-center justify-between mb-4">
+            <div>
+              <h1 className="text-4xl font-bold mb-2">AI 产品追踪</h1>
+              <p className="text-muted-foreground text-lg">
+                追踪 AI 产品的更新、变化和重要事件
+              </p>
+            </div>
+            <SubscribeDialog />
+          </div>
           <Select defaultValue="all">
             <SelectTrigger className="h-10 w-48 rounded-full text-base bg-background border border-input focus:ring-2 focus:ring-primary/30 transition-all">
               <SelectValue placeholder="选择类别" />
@@ -142,6 +149,7 @@ const ProductsPage: NextPage = () => {
           </div>
         </div>
       </div>
+      <Toaster />
     </Layout>
   );
 };
