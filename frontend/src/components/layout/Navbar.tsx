@@ -6,7 +6,7 @@ const Navbar = () => {
       <div className="container mx-auto px-4">
         <div className="flex justify-between items-center h-16">
           <Link href="/" className="text-xl font-bold text-primary-600">
-            AI Version Tracker
+            AI Tracker
           </Link>
 
           <div className="hidden md:flex space-x-8">

@@ -87,7 +87,7 @@ const NewsDetailPage: NextPage = () => {
   return (
     <Layout>
       <Head>
-        <title>{news.title} - AI Version Tracker</title>
+        <title>{news.title} - AI Tracker</title>
         <meta name="description" content={news.title} />
       </Head>
 

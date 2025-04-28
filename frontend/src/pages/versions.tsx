@@ -6,7 +6,7 @@ const VersionsPage: NextPage = () => {
   return (
     <Layout>
       <Head>
-        <title>版本更新 - AI Version Tracker</title>
+        <title>版本更新 - AI Tracker</title>
         <meta name="description" content="Track AI product version updates" />
       </Head>
 

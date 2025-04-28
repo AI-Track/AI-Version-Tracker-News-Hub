@@ -166,7 +166,7 @@ const ProductDetailPage: NextPage = () => {
   return (
     <Layout>
       <Head>
-        <title>{product.name} - AI Version Tracker</title>
+        <title>{product.name} - AI Tracker</title>
         <meta name="description" content={`Track ${product.name} updates and changes`} />
       </Head>
 

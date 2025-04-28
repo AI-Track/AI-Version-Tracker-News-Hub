@@ -69,7 +69,7 @@ const HomePage: NextPage = () => {
   return (
     <Layout>
       <Head>
-        <title>AI Version Tracker - 首页</title>
+        <title>AI Tracker - 首页</title>
         <meta name="description" content="Latest AI news and updates" />
       </Head>
 

@@ -20,7 +20,7 @@ const Layout = ({ children }: LayoutProps) => {
       <header className="border-b">
         <nav className="container mx-auto px-4 h-16 flex items-center justify-between">
           <Link href="/" className="text-xl font-bold">
-            AI Version Tracker
+            AI Tracker
           </Link>
           <div className="flex space-x-6">
             {navItems.map((item) => (
@@ -42,7 +42,7 @@ const Layout = ({ children }: LayoutProps) => {
       {children}
       <footer className="border-t py-6">
         <div className="container mx-auto px-4 text-center text-sm text-muted-foreground">
-          © 2024 AI Version Tracker. All rights reserved.
+          © 2024 AI Tracker. All rights reserved.
         </div>
       </footer>
     </div>

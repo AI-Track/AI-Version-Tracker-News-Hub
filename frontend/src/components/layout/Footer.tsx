@@ -6,7 +6,7 @@ const Footer = () => {
           <div>
             <h3 className="text-lg font-semibold mb-4">关于我们</h3>
             <p className="text-gray-600">
-              AI Version Tracker & News Hub 致力于为开发者提供最新的 AI 产品更新和新闻资讯。
+              AI Tracker & News Hub 致力于为开发者提供最新的 AI 产品更新和新闻资讯。
             </p>
           </div>
 
@@ -47,7 +47,7 @@ const Footer = () => {
         </div>
 
         <div className="mt-8 pt-8 border-t border-gray-200 text-center text-gray-600">
-          <p>&copy; {new Date().getFullYear()} AI Version Tracker & News Hub. All rights reserved.</p>
+          <p>&copy; {new Date().getFullYear()} AI Tracker & News Hub. All rights reserved.</p>
         </div>
       </div>
     </footer>

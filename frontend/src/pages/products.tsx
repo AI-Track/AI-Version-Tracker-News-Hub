@@ -8,7 +8,7 @@ const ProductsPage: NextPage = () => {
   return (
     <Layout>
       <Head>
-        <title>产品追踪 - AI Version Tracker</title>
+        <title>产品追踪 - AI Tracker</title>
         <meta name="description" content="Track AI product updates and changes" />
       </Head>
 

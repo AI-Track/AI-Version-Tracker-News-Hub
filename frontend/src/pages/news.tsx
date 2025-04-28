@@ -6,7 +6,7 @@ const NewsPage: NextPage = () => {
   return (
     <Layout>
       <Head>
-        <title>新闻动态 - AI Version Tracker</title>
+        <title>新闻动态 - AI Tracker</title>
         <meta name="description" content="Latest AI news and updates" />
       </Head>
 
