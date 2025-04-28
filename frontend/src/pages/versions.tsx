@@ -10,7 +10,7 @@ const VersionsPage: NextPage = () => {
         <meta name="description" content="Track AI product version updates" />
       </Head>
 
-      <main className="container mx-auto px-4 py-8">
+      <div className="container mx-auto px-4 py-8 flex-1">
         <section className="mb-8">
           <h1 className="text-4xl font-bold mb-4">AI 产品版本更新</h1>
           <p className="text-muted-foreground text-lg">
@@ -18,7 +18,7 @@ const VersionsPage: NextPage = () => {
           </p>
         </section>
 
-        <section className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <section className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 flex-1">
           {/* OpenAI Updates */}
           <div className="card p-6">
             <div className="flex items-center mb-6">
@@ -131,7 +131,7 @@ const VersionsPage: NextPage = () => {
             {/* Additional product cards will be added here */}
           </div>
         </section>
-      </main>
+      </div>
     </Layout>
   );
 };

@@ -16,8 +16,8 @@ const Layout = ({ children }: LayoutProps) => {
   ];
 
   return (
-    <div className="min-h-screen bg-background">
-      <header className="border-b">
+    <div className="flex min-h-screen flex-col bg-background">
+      <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
         <nav className="container mx-auto px-4 h-16 flex items-center justify-between">
           <Link href="/" className="text-xl font-bold">
             AI Tracker
@@ -39,8 +39,10 @@ const Layout = ({ children }: LayoutProps) => {
           </div>
         </nav>
       </header>
-      {children}
-      <footer className="border-t py-6">
+      <main className="flex-1 flex flex-col">
+        {children}
+      </main>
+      <footer className="border-t py-6 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
         <div className="container mx-auto px-4 text-center text-sm text-muted-foreground">
           © 2024 AI Tracker. All rights reserved.
         </div>
