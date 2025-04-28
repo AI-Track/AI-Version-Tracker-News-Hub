@@ -2,6 +2,7 @@ import { NextPage } from 'next';
 import Head from 'next/head';
 import Layout from '@/components/Layout';
 import { Search } from 'lucide-react';
+import Link from 'next/link';
 
 const ProductsPage: NextPage = () => {
   return (
@@ -66,12 +67,12 @@ const ProductsPage: NextPage = () => {
               </div>
             </div>
             <div className="mt-4">
-              <a
-                href="#"
+              <Link
+                href="/products/openai"
                 className="btn-primary w-full text-center block"
               >
                 查看详情
-              </a>
+              </Link>
             </div>
           </div>
 
@@ -99,12 +100,12 @@ const ProductsPage: NextPage = () => {
               </div>
             </div>
             <div className="mt-4">
-              <a
-                href="#"
+              <Link
+                href="/products/github-copilot"
                 className="btn-primary w-full text-center block"
               >
                 查看详情
-              </a>
+              </Link>
             </div>
           </div>
 
@@ -132,12 +133,12 @@ const ProductsPage: NextPage = () => {
               </div>
             </div>
             <div className="mt-4">
-              <a
-                href="#"
+              <Link
+                href="/products/cursor"
                 className="btn-primary w-full text-center block"
               >
                 查看详情
-              </a>
+              </Link>
             </div>
           </div>
         </div>
