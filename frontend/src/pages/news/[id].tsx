@@ -1,9 +1,9 @@
 import { NextPage } from 'next';
 import Head from 'next/head';
-import Layout from '@/components/Layout';
+import Layout from '@/components/layout/Layout';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
-import { Calendar, Clock, Tag, Eye } from 'lucide-react';
+import { Calendar, Clock, Tag, BookOpen, BookOpenCheck } from 'lucide-react';
 import * as Tooltip from '@radix-ui/react-tooltip';
 
 // 模拟新闻详情数据
@@ -129,7 +129,11 @@ const NewsDetailPage: NextPage = () => {
                       className="inline-flex items-center p-2 rounded-lg bg-secondary hover:bg-secondary/80 transition-colors"
                       aria-label={isBionicReading ? '切换到普通阅读' : '切换到 Bionic 阅读'}
                     >
-                      <Eye className="w-5 h-5" />
+                      {isBionicReading ? (
+                        <BookOpenCheck className="w-5 h-5" />
+                      ) : (
+                        <BookOpen className="w-5 h-5" />
+                      )}
                     </button>
                   </Tooltip.Trigger>
                   <Tooltip.Portal>

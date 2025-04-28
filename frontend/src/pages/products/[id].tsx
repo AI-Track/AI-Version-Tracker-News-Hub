@@ -1,6 +1,6 @@
 import { NextPage } from 'next';
 import Head from 'next/head';
-import Layout from '@/components/Layout';
+import Layout from '@/components/layout/Layout';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
 import { ArrowLeft, Calendar, Tag, Code, MessageSquare, ChevronDown, ChevronUp } from 'lucide-react';
