@@ -4,6 +4,7 @@ import Layout from '@/components/Layout';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
 import { Calendar, Clock, Tag, Eye } from 'lucide-react';
+import * as Tooltip from '@radix-ui/react-tooltip';
 
 // 模拟新闻详情数据
 const newsData = {
@@ -120,13 +121,28 @@ const NewsDetailPage: NextPage = () => {
             <h1 className="text-4xl font-bold mb-4">{news.title}</h1>
             <div className="flex items-center justify-between">
               <span className="text-muted-foreground">作者：{news.author}</span>
-              <button
-                onClick={() => setIsBionicReading(!isBionicReading)}
-                className="inline-flex items-center px-4 py-2 rounded-lg bg-secondary text-secondary-foreground hover:bg-secondary/80 transition-colors"
-              >
-                <Eye className="w-4 h-4 mr-2" />
-                {isBionicReading ? '普通阅读' : 'Bionic 阅读'}
-              </button>
+              <Tooltip.Provider>
+                <Tooltip.Root>
+                  <Tooltip.Trigger asChild>
+                    <button
+                      onClick={() => setIsBionicReading(!isBionicReading)}
+                      className="inline-flex items-center p-2 rounded-lg bg-secondary hover:bg-secondary/80 transition-colors"
+                      aria-label={isBionicReading ? '切换到普通阅读' : '切换到 Bionic 阅读'}
+                    >
+                      <Eye className="w-5 h-5" />
+                    </button>
+                  </Tooltip.Trigger>
+                  <Tooltip.Portal>
+                    <Tooltip.Content
+                      className="px-3 py-1.5 text-sm bg-secondary text-secondary-foreground rounded-md shadow-md"
+                      sideOffset={5}
+                    >
+                      {isBionicReading ? '切换到普通阅读' : '切换到 Bionic 阅读'}
+                      <Tooltip.Arrow className="fill-secondary" />
+                    </Tooltip.Content>
+                  </Tooltip.Portal>
+                </Tooltip.Root>
+              </Tooltip.Provider>
             </div>
           </header>
 
