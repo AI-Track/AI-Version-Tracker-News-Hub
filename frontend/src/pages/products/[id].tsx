@@ -45,9 +45,9 @@ const ProductDetailPage: NextPage = () => {
 
   // 更新产品数据，加入更多版本历史
   const productData = {
-    openai: {
+    '1': {
       name: 'OpenAI',
-      logo: '/images/chatgpt-icon.png',
+      logo: '/images/openai.png',
       type: '聊天机器人',
       currentVersion: 'GPT-4 Turbo',
       lastUpdate: '2024-04-15',
@@ -60,9 +60,9 @@ const ProductDetailPage: NextPage = () => {
       ],
       versions: moreVersions,
     },
-    'github-copilot': {
+    '2': {
       name: 'GitHub Copilot',
-      logo: '/images/github-copilot-icon.png',
+      logo: '/images/github-copilot.png',
       type: '代码助手',
       currentVersion: '2.0',
       lastUpdate: '2024-04-10',
@@ -75,9 +75,9 @@ const ProductDetailPage: NextPage = () => {
       ],
       versions: moreVersions,
     },
-    cursor: {
+    '3': {
       name: 'Cursor',
-      logo: '/images/cursor-icon.webp',
+      logo: '/images/cursor.webp',
       type: '代码编辑器',
       currentVersion: '0.20.0',
       lastUpdate: '2024-04-20',
