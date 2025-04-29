@@ -13,142 +13,113 @@ import {
 import { Filter } from "lucide-react";
 import { SubscribeDialog } from "@/components/subscription/SubscribeDialog";
 import { Toaster } from "@/components/ui/toaster";
+import { useStore } from '../store';
+import { useEffect } from 'react';
 
 const ProductsPage: NextPage = () => {
+  const { 
+    products, 
+    setProducts, 
+    selectedCategory, 
+    setSelectedCategory,
+    searchQuery,
+    setSearchQuery
+  } = useStore()
+
+  useEffect(() => {
+    // Mock data - replace with actual API call
+    setProducts([
+      {
+        id: '1',
+        name: 'OpenAI',
+        type: 'chatbot',
+        version: 'GPT-4',
+        lastUpdate: '2024-03-20',
+        image: '/images/openai.png',
+        description: 'Leading AI language model'
+      },
+      {
+        id: '2',
+        name: 'GitHub Copilot',
+        type: 'code',
+        version: '2.0',
+        lastUpdate: '2024-03-15',
+        image: '/images/github-copilot.png',
+        description: 'AI pair programmer'
+      },
+      {
+        id: '3',
+        name: 'Cursor',
+        type: 'code',
+        version: '1.5',
+        lastUpdate: '2024-03-18',
+        image: '/images/cursor.png',
+        description: 'AI-powered code editor'
+      }
+    ])
+  }, [])
+
+  const filteredProducts = products.filter(product => {
+    const matchesCategory = !selectedCategory || product.type === selectedCategory
+    const matchesSearch = !searchQuery || 
+      product.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      product.description.toLowerCase().includes(searchQuery.toLowerCase())
+    return matchesCategory && matchesSearch
+  })
+
   return (
     <Layout>
       <Head>
-        <title>产品追踪 - AI Tracker</title>
-        <meta name="description" content="Track AI product updates and changes" />
+        <title>AI 产品追踪 | AI News</title>
+        <meta name="description" content="追踪最新 AI 产品的更新动态" />
       </Head>
 
-      <div className="container mx-auto px-4 py-8 flex-1">
-        <section className="mb-4">
-          <div className="flex items-center justify-between mb-4">
-            <div>
-              <h1 className="text-4xl font-bold mb-2">AI 产品追踪</h1>
-              <p className="text-muted-foreground text-lg">
-                追踪 AI 产品的更新、变化和重要事件
-              </p>
-            </div>
-            <SubscribeDialog />
-          </div>
-          <Select defaultValue="all">
-            <SelectTrigger className="h-10 w-48 rounded-full text-base bg-background border border-input focus:ring-2 focus:ring-primary/30 transition-all">
-              <SelectValue placeholder="选择类别" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="all">🧩 所有类别</SelectItem>
-              <SelectItem value="chatbot">💬 聊天机器人</SelectItem>
-              <SelectItem value="code">💻 代码助手</SelectItem>
-              <SelectItem value="image">🖼️ 图像生成</SelectItem>
-              <SelectItem value="audio">🎵 音频处理</SelectItem>
-            </SelectContent>
-          </Select>
-        </section>
+      <main className="container mx-auto px-4 py-8">
+        <h1 className="text-4xl font-bold mb-4">AI 产品追踪</h1>
+        <p className="text-gray-600 mb-8">
+          实时追踪各大 AI 产品的最新更新，及时了解产品动态
+        </p>
 
-        {/* 产品卡片区域 */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 flex-1">
-          {/* OpenAI */}
-          <div className="card p-6 rounded-2xl shadow-lg bg-card transition-transform hover:scale-105 hover:shadow-2xl flex flex-col">
-            <div className="flex items-center mb-4">
-              <img
-                src="/images/chatgpt-icon.png"
-                alt="OpenAI"
-                className="w-14 h-14 rounded-xl mr-4 object-cover"
-              />
-              <div>
-                <h3 className="text-xl font-semibold">OpenAI</h3>
-                <p className="text-sm text-muted-foreground">聊天机器人</p>
-              </div>
-            </div>
-            <div className="space-y-2 flex-1">
-              <div className="flex justify-between">
-                <span className="text-muted-foreground">当前版本</span>
-                <span className="font-medium">GPT-4 Turbo</span>
-              </div>
-              <div className="flex justify-between">
-                <span className="text-muted-foreground">上次更新</span>
-                <span className="text-muted-foreground">2024-04-15</span>
-              </div>
-            </div>
-            <div className="mt-6">
-              <Link
-                href="/products/openai"
-                className="block w-full text-center py-2 rounded-full bg-primary text-primary-foreground font-semibold shadow hover:bg-primary/90 transition-all"
-              >
-                查看详情
-              </Link>
-            </div>
-          </div>
-
-          {/* GitHub Copilot */}
-          <div className="card p-6 rounded-2xl shadow-lg bg-card transition-transform hover:scale-105 hover:shadow-2xl flex flex-col">
-            <div className="flex items-center mb-4">
-              <img
-                src="/images/github-copilot-icon.png"
-                alt="GitHub"
-                className="w-14 h-14 rounded-xl mr-4 object-cover"
-              />
-              <div>
-                <h3 className="text-xl font-semibold">GitHub Copilot</h3>
-                <p className="text-sm text-muted-foreground">代码助手</p>
-              </div>
-            </div>
-            <div className="space-y-2 flex-1">
-              <div className="flex justify-between">
-                <span className="text-muted-foreground">当前版本</span>
-                <span className="font-medium">2.0</span>
-              </div>
-              <div className="flex justify-between">
-                <span className="text-muted-foreground">上次更新</span>
-                <span className="text-muted-foreground">2024-04-10</span>
-              </div>
-            </div>
-            <div className="mt-6">
-              <Link
-                href="/products/github-copilot"
-                className="block w-full text-center py-2 rounded-full bg-primary text-primary-foreground font-semibold shadow hover:bg-primary/90 transition-all"
-              >
-                查看详情
-              </Link>
-            </div>
-          </div>
-
-          {/* Cursor */}
-          <div className="card p-6 rounded-2xl shadow-lg bg-card transition-transform hover:scale-105 hover:shadow-2xl flex flex-col">
-            <div className="flex items-center mb-4">
-              <img
-                src="/images/cursor-icon.webp"
-                alt="Cursor"
-                className="w-14 h-14 rounded-xl mr-4 object-cover"
-              />
-              <div>
-                <h3 className="text-xl font-semibold">Cursor</h3>
-                <p className="text-sm text-muted-foreground">代码编辑器</p>
-              </div>
-            </div>
-            <div className="space-y-2 flex-1">
-              <div className="flex justify-between">
-                <span className="text-muted-foreground">当前版本</span>
-                <span className="font-medium">0.20.0</span>
-              </div>
-              <div className="flex justify-between">
-                <span className="text-muted-foreground">上次更新</span>
-                <span className="text-muted-foreground">2024-04-20</span>
-              </div>
-            </div>
-            <div className="mt-6">
-              <Link
-                href="/products/cursor"
-                className="block w-full text-center py-2 rounded-full bg-primary text-primary-foreground font-semibold shadow hover:bg-primary/90 transition-all"
-              >
-                查看详情
-              </Link>
-            </div>
-          </div>
+        <div className="flex flex-col md:flex-row gap-4 mb-8">
+          <input
+            type="text"
+            placeholder="搜索产品..."
+            className="flex-1 p-2 border rounded"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+          />
+          <select
+            className="p-2 border rounded"
+            value={selectedCategory || ''}
+            onChange={(e) => setSelectedCategory(e.target.value || null)}
+          >
+            <option value="">所有类别</option>
+            <option value="chatbot">聊天机器人</option>
+            <option value="code">代码</option>
+            <option value="image">图像</option>
+            <option value="audio">音频</option>
+          </select>
         </div>
-      </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {filteredProducts.map((product) => (
+            <div key={product.id} className="border rounded-lg p-4 shadow-sm">
+              <img
+                src={product.image}
+                alt={product.name}
+                className="w-full h-48 object-cover rounded-lg mb-4"
+              />
+              <h2 className="text-xl font-bold mb-2">{product.name}</h2>
+              <p className="text-gray-600 mb-2">{product.type}</p>
+              <p className="text-sm text-gray-500 mb-1">当前版本: {product.version}</p>
+              <p className="text-sm text-gray-500 mb-4">最后更新: {product.lastUpdate}</p>
+              <button className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition-colors">
+                查看详情
+              </button>
+            </div>
+          ))}
+        </div>
+      </main>
       <Toaster />
     </Layout>
   );
