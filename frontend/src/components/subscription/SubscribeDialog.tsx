@@ -23,17 +23,19 @@ import {
 } from "@/components/ui/form";
 import { useToast } from "@/hooks/use-toast";
 import { Bell } from "lucide-react";
-
-const formSchema = z.object({
-  email: z.string().email({
-    message: "请输入有效的邮箱地址",
-  }),
-});
+import { useTranslation } from "@/hooks/useTranslation";
 
 export function SubscribeDialog() {
   const [open, setOpen] = useState(false);
   const { toast } = useToast();
+  const { t } = useTranslation();
   
+  const formSchema = z.object({
+    email: z.string().email({
+      message: t('products.subscribe.validation.email'),
+    }),
+  });
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -47,8 +49,8 @@ export function SubscribeDialog() {
       console.log(values);
       
       toast({
-        title: "订阅成功！",
-        description: "我们会通过邮件通知你最新的 AI 产品更新。",
+        title: t('products.subscribe.success.title'),
+        description: t('products.subscribe.success.description'),
       });
       
       setOpen(false);
@@ -56,8 +58,8 @@ export function SubscribeDialog() {
     } catch (error) {
       toast({
         variant: "destructive",
-        title: "订阅失败",
-        description: "请稍后重试。",
+        title: t('products.subscribe.error.title'),
+        description: t('products.subscribe.error.description'),
       });
     }
   }
@@ -67,14 +69,14 @@ export function SubscribeDialog() {
       <DialogTrigger asChild>
         <Button variant="outline" className="gap-2">
           <Bell className="h-4 w-4" />
-          订阅更新
+          {t('products.subscribe.button')}
         </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
-          <DialogTitle>订阅 AI 产品更新</DialogTitle>
+          <DialogTitle>{t('products.subscribe.title')}</DialogTitle>
           <DialogDescription>
-            输入你的邮箱地址，我们会在产品有重要更新时通知你。
+            {t('products.subscribe.description')}
           </DialogDescription>
         </DialogHeader>
         <Form {...form}>
@@ -84,16 +86,16 @@ export function SubscribeDialog() {
               name="email"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>邮箱地址</FormLabel>
+                  <FormLabel>{t('products.subscribe.emailLabel')}</FormLabel>
                   <FormControl>
-                    <Input placeholder="your@email.com" {...field} />
+                    <Input placeholder={t('products.subscribe.emailPlaceholder')} {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
               )}
             />
             <DialogFooter>
-              <Button type="submit">确认订阅</Button>
+              <Button type="submit">{t('products.subscribe.submitButton')}</Button>
             </DialogFooter>
           </form>
         </Form>

@@ -1,53 +1,69 @@
 import { ReactNode } from 'react';
+import { ThemeToggle } from '../common/ThemeToggle';
+import { LanguageToggle } from '../common/LanguageToggle';
+import { GlobalError } from '../common/GlobalError';
+import ErrorBoundary from '../common/ErrorBoundary';
+import { useStore } from '@/store';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
+import { useTranslation } from '@/hooks/useTranslation';
 
 interface LayoutProps {
   children: ReactNode;
 }
 
 const Layout = ({ children }: LayoutProps) => {
+  const { t } = useTranslation();
   const router = useRouter();
 
   const navItems = [
-    { href: '/', label: '新闻动态' },
-    { href: '/products', label: '产品追踪' },
-    { href: '/versions', label: '版本更新' },
+    { href: '/products', label: t('layout.products') },
+    { href: '/versions', label: t('layout.versions') },
   ];
 
   return (
-    <div className="flex min-h-screen flex-col bg-background">
-      <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-        <nav className="container mx-auto px-4 h-16 flex items-center justify-between">
-          <Link href="/" className="text-xl font-bold">
-            AI Tracker
-          </Link>
-          <div className="flex space-x-6">
-            {navItems.map((item) => (
-              <Link
-                key={item.href}
-                href={item.href}
-                className={`text-sm font-medium transition-colors hover:text-primary ${
-                  router.pathname === item.href
-                    ? 'text-primary'
-                    : 'text-muted-foreground'
-                }`}
-              >
-                {item.label}
+    <ErrorBoundary>
+      <div className="min-h-screen bg-white dark:bg-gray-900 text-gray-900 dark:text-white">
+        <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+          <div className="container mx-auto px-4 py-4 flex items-center justify-between">
+            <nav className="flex items-center space-x-4">
+              <Link href="/" className="text-xl font-bold">
+                {t('layout.title')}
               </Link>
-            ))}
+              {navItems.map((item) => (
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  className={`text-sm font-medium transition-colors hover:text-primary ${
+                    router.pathname === item.href
+                      ? 'text-primary'
+                      : 'text-muted-foreground'
+                  }`}
+                >
+                  {item.label}
+                </Link>
+              ))}
+            </nav>
+            <div className="flex items-center space-x-2">
+              <ThemeToggle />
+              <LanguageToggle />
+            </div>
           </div>
-        </nav>
-      </header>
-      <main className="flex-1 flex flex-col">
-        {children}
-      </main>
-      <footer className="border-t py-6 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-        <div className="container mx-auto px-4 text-center text-sm text-muted-foreground">
-          © 2024 AI Tracker. All rights reserved.
-        </div>
-      </footer>
-    </div>
+        </header>
+
+        <main className="flex-1 flex flex-col">
+          {children}
+        </main>
+
+        <footer className="border-t py-6 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+          <div className="container mx-auto px-4 text-center text-sm text-muted-foreground">
+            {t('layout.copyright')}
+          </div>
+        </footer>
+
+        <GlobalError />
+      </div>
+    </ErrorBoundary>
   );
 };
 

@@ -1,20 +1,23 @@
 import { NextPage } from 'next';
 import Head from 'next/head';
 import Layout from '@/components/layout/Layout';
+import { useTranslation } from '@/hooks/useTranslation';
 
 const VersionsPage: NextPage = () => {
+  const { t } = useTranslation();
+
   return (
     <Layout>
       <Head>
-        <title>版本更新 - AI Tracker</title>
-        <meta name="description" content="Track AI product version updates" />
+        <title>{t('versions.title')} | {t('layout.title')}</title>
+        <meta name="description" content={t('versions.subtitle')} />
       </Head>
 
       <div className="container mx-auto px-4 py-8 flex-1">
         <section className="mb-8">
-          <h1 className="text-4xl font-bold mb-4">AI 产品版本更新</h1>
+          <h1 className="text-4xl font-bold mb-4">{t('versions.title')}</h1>
           <p className="text-muted-foreground text-lg">
-            追踪主流 AI 产品的版本迭代和功能更新
+            {t('versions.subtitle')}
           </p>
         </section>
 
@@ -29,7 +32,7 @@ const VersionsPage: NextPage = () => {
               />
               <div>
                 <h2 className="text-xl font-semibold">OpenAI</h2>
-                <p className="text-sm text-muted-foreground">聊天机器人</p>
+                <p className="text-sm text-muted-foreground">{t('versions.categories.chatbot')}</p>
               </div>
             </div>
             <div className="space-y-4">
@@ -64,7 +67,7 @@ const VersionsPage: NextPage = () => {
               />
               <div>
                 <h2 className="text-xl font-semibold">GitHub Copilot</h2>
-                <p className="text-sm text-muted-foreground">代码助手</p>
+                <p className="text-sm text-muted-foreground">{t('versions.categories.code')}</p>
               </div>
             </div>
             <div className="space-y-4">
@@ -99,7 +102,7 @@ const VersionsPage: NextPage = () => {
               />
               <div>
                 <h2 className="text-xl font-semibold">Cursor</h2>
-                <p className="text-sm text-muted-foreground">代码编辑器</p>
+                <p className="text-sm text-muted-foreground">{t('versions.categories.code')}</p>
               </div>
             </div>
             <div className="space-y-4">
@@ -126,7 +129,7 @@ const VersionsPage: NextPage = () => {
         </section>
 
         <section className="mt-12">
-          <h2 className="text-2xl font-semibold mb-6">其他 AI 产品</h2>
+          <h2 className="text-2xl font-semibold mb-6">{t('versions.otherProducts')}</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {/* Additional product cards will be added here */}
           </div>

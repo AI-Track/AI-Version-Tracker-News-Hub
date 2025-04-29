@@ -1,4 +1,5 @@
 import { create } from 'zustand'
+import { persist } from 'zustand/middleware'
 
 interface NewsState {
   news: Array<{
@@ -35,22 +36,65 @@ interface ProductState {
   setSearchQuery: (query: string) => void
 }
 
-interface Store extends NewsState, ProductState {}
+interface ThemeState {
+  theme: 'light' | 'dark'
+  setTheme: (theme: 'light' | 'dark') => void
+}
 
-export const useStore = create<Store>((set) => ({
-  // News state
-  news: [],
-  setNews: (news) => set({ news }),
-  loading: false,
-  setLoading: (loading) => set({ loading }),
-  error: null,
-  setError: (error) => set({ error }),
+interface LanguageState {
+  language: 'zh' | 'en'
+  setLanguage: (language: 'zh' | 'en') => void
+}
 
-  // Products state
-  products: [],
-  setProducts: (products) => set({ products }),
-  selectedCategory: null,
-  setSelectedCategory: (category) => set({ selectedCategory: category }),
-  searchQuery: '',
-  setSearchQuery: (query) => set({ searchQuery: query })
-})) 
+interface ErrorState {
+  globalError: {
+    message: string;
+    type: 'error' | 'warning' | 'info' | null;
+  } | null;
+  setGlobalError: (error: ErrorState['globalError']) => void;
+  clearGlobalError: () => void;
+}
+
+interface Store extends NewsState, ProductState, ThemeState, LanguageState, ErrorState {}
+
+export const useStore = create<Store>()(
+  persist(
+    (set) => ({
+      // News state
+      news: [],
+      setNews: (news) => set({ news }),
+      loading: false,
+      setLoading: (loading) => set({ loading }),
+      error: null,
+      setError: (error) => set({ error }),
+
+      // Products state
+      products: [],
+      setProducts: (products) => set({ products }),
+      selectedCategory: null,
+      setSelectedCategory: (category) => set({ selectedCategory: category }),
+      searchQuery: '',
+      setSearchQuery: (query) => set({ searchQuery: query }),
+
+      // Theme state
+      theme: 'light',
+      setTheme: (theme) => set({ theme }),
+
+      // Language state
+      language: 'zh',
+      setLanguage: (language) => set({ language }),
+
+      // Global error state
+      globalError: null,
+      setGlobalError: (error) => set({ globalError: error }),
+      clearGlobalError: () => set({ globalError: null }),
+    }),
+    {
+      name: 'ai-news-storage',
+      partialize: (state) => ({
+        theme: state.theme,
+        language: state.language,
+      }),
+    }
+  )
+) 

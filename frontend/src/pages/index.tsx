@@ -4,11 +4,11 @@ import Layout from '@/components/layout/Layout';
 import { useState, useEffect } from 'react';
 import { ChevronLeft, ChevronRight, Clock } from 'lucide-react';
 import Link from 'next/link';
-
+import { useTranslation } from '@/hooks/useTranslation';
 const HomePage: NextPage = () => {
   const [currentSlide, setCurrentSlide] = useState(0);
   const [loading, setLoading] = useState(false);
-
+  const { t } = useTranslation();
   // 模拟新闻数据
   const featuredNews = [
     {
@@ -96,7 +96,7 @@ const HomePage: NextPage = () => {
                         href={`/news/${news.id}`}
                         className="inline-block px-6 py-3 rounded-lg bg-primary text-primary-foreground hover:bg-primary/90 transition-colors"
                       >
-                        阅读更多
+                        {t('news.readMore')}
                       </Link>
                     </div>
                     <div className="hidden md:block">
@@ -154,17 +154,17 @@ const HomePage: NextPage = () => {
             <div className="flex items-center justify-between mb-8">
               <h2 className="text-2xl font-bold flex items-center">
                 <Clock className="w-6 h-6 mr-2 text-primary" />
-                最新动态
+                {t('news.latestNews')}
               </h2>
               <div className="flex items-center space-x-4">
                 <button className="text-sm text-muted-foreground hover:text-primary">
-                  最新
+                  {t('news.latestNews')}
                 </button>
                 <button className="text-sm text-muted-foreground hover:text-primary">
-                  最热
+                  {t('news.hotNews')}
                 </button>
                 <button className="text-sm text-muted-foreground hover:text-primary">
-                  推荐
+                  {t('news.trending')}
                 </button>
               </div>
             </div>
@@ -201,7 +201,7 @@ const HomePage: NextPage = () => {
                           {news.date}
                         </span>
                         <span className="text-primary hover:text-primary/90">
-                          阅读更多 →
+                          {t('news.readMore')} →
                         </span>
                       </div>
                     </div>
@@ -220,7 +220,7 @@ const HomePage: NextPage = () => {
                   setTimeout(() => setLoading(false), 1000);
                 }}
               >
-                {loading ? '加载中...' : '加载更多'}
+                {loading ? t('news.loading') : t('news.loadMore')}
               </button>
             </div>
           </div>
