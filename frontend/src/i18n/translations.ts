@@ -38,12 +38,12 @@ export const translations = {
       subtitle: '追踪 AI 产品的更新、变化和重要事件',
       searchPlaceholder: '搜索产品...',
       filter: {
-        title: '选择类别',
-        all: '所有类别',
-        chatbot: '聊天机器人',
-        code: '代码助手',
-        image: '图像生成',
-        audio: '音频处理'
+        title: '🔍 选择类别',
+        all: '🧩 所有类别',
+        chatbot: '💬 聊天机器人',
+        code: '💻 代码助手',
+        image: '🎨 图像生成',
+        audio: '🎵 音频处理'
       },
       card: {
         currentVersion: '当前版本',
@@ -143,12 +143,12 @@ export const translations = {
       subtitle: 'Track updates, changes and important events of AI products',
       searchPlaceholder: 'Search products...',
       filter: {
-        title: 'Select Category',
-        all: 'All Categories',
-        chatbot: 'Chatbots',
-        code: 'Code Assistants',
-        image: 'Image Generation',
-        audio: 'Audio Processing'
+        title: '🔍 Select Category',
+        all: '🧩  All Categories',
+        chatbot: '💬 Chatbots',
+        code: '💻 Code Assistants',
+        image: '🎨 Image Generation',
+        audio: '🎵 Audio Processing'
       },
       card: {
         currentVersion: 'Current Version',

@@ -23,7 +23,7 @@ const Layout = ({ children }: LayoutProps) => {
 
   return (
     <ErrorBoundary>
-      <div className="min-h-screen bg-white dark:bg-gray-900 text-gray-900 dark:text-white">
+      <div className="min-h-screen bg-white dark:bg-gray-900 text-gray-900 dark:text-white flex flex-col">
         <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
           <div className="container mx-auto px-4 py-4 flex items-center justify-between">
             <nav className="flex items-center space-x-4">
@@ -51,11 +51,14 @@ const Layout = ({ children }: LayoutProps) => {
           </div>
         </header>
 
-        <main className="flex-1 flex flex-col">
-          {children}
+
+        <main className="flex-1 flex flex-col w-full bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/95">
+          <div className="container mx-auto px-4 w-full">
+            {children}
+          </div>
         </main>
 
-        <footer className="border-t py-6 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+        <footer className="border-t py-6 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/95">
           <div className="container mx-auto px-4 text-center text-sm text-muted-foreground">
             {t('layout.copyright')}
           </div>

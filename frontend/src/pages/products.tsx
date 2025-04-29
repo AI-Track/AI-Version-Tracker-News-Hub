@@ -76,8 +76,8 @@ const ProductsPage: NextPage = () => {
         <meta name="description" content={t('products.subtitle')} />
       </Head>
 
-      <main className="container mx-auto px-4 py-8">
-        <section className="mb-4">
+      <div className="py-8">
+        <section className="mb-8">
           <div className="flex items-center justify-between mb-4">
             <div>
               <h1 className="text-4xl font-bold mb-2">{t('products.title')}</h1>
@@ -142,7 +142,7 @@ const ProductsPage: NextPage = () => {
             ))
           )}
         </div>
-      </main>
+      </div>
       <Toaster />
     </Layout>
   );

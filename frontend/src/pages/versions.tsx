@@ -13,7 +13,7 @@ const VersionsPage: NextPage = () => {
         <meta name="description" content={t('versions.subtitle')} />
       </Head>
 
-      <div className="container mx-auto px-4 py-8 flex-1">
+      <div className="py-8">
         <section className="mb-8">
           <h1 className="text-4xl font-bold mb-4">{t('versions.title')}</h1>
           <p className="text-muted-foreground text-lg">
@@ -21,7 +21,7 @@ const VersionsPage: NextPage = () => {
           </p>
         </section>
 
-        <section className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 flex-1">
+        <section className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {/* OpenAI Updates */}
           <div className="card p-6">
             <div className="flex items-center mb-6">
