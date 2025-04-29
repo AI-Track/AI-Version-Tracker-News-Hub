@@ -10,12 +10,13 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Filter } from "lucide-react";
+import { Filter, History } from "lucide-react";
 import { SubscribeDialog } from "@/components/subscription/SubscribeDialog";
 import { Toaster } from "@/components/ui/toaster";
 import { useStore } from '../store';
 import { useEffect } from 'react';
 import { useTranslation } from '@/hooks/useTranslation';
+import { useRouter } from 'next/router';
 
 const ProductsPage: NextPage = () => {
   const { t } = useTranslation();
@@ -27,6 +28,7 @@ const ProductsPage: NextPage = () => {
     searchQuery,
     setSearchQuery
   } = useStore();
+  const router = useRouter();
 
   useEffect(() => {
     // Mock data - replace with actual API call
@@ -87,18 +89,30 @@ const ProductsPage: NextPage = () => {
             </div>
             <SubscribeDialog />
           </div>
-          <Select defaultValue="all" onValueChange={setSelectedCategory}>
-            <SelectTrigger className="h-10 w-48 rounded-full text-base bg-background border border-input focus:ring-2 focus:ring-primary/30 transition-all">
-              <SelectValue placeholder={t('products.filter.title')} />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="all">{t('products.filter.all')}</SelectItem>
-              <SelectItem value="chatbot">{t('products.filter.chatbot')}</SelectItem>
-              <SelectItem value="code">{t('products.filter.code')}</SelectItem>
-              <SelectItem value="image">{t('products.filter.image')}</SelectItem>
-              <SelectItem value="audio">{t('products.filter.audio')}</SelectItem>
-            </SelectContent>
-          </Select>
+          <div className="w-fit">
+            <Select 
+              defaultValue="all" 
+              onValueChange={setSelectedCategory}
+              options={[
+                { label: t('products.filter.all'), value: 'all' },
+                { label: t('products.filter.chatbot'), value: 'chatbot' },
+                { label: t('products.filter.code'), value: 'code' },
+                { label: t('products.filter.image'), value: 'image' },
+                { label: t('products.filter.audio'), value: 'audio' }
+              ]}
+            >
+              <SelectTrigger className="w-48 rounded-full text-base bg-background border border-input focus:ring-2 focus:ring-primary/30 transition-all">
+                <SelectValue placeholder={t('products.filter.title')} />
+              </SelectTrigger>
+              <SelectContent className="w-48">
+                <SelectItem value="all">{t('products.filter.all')}</SelectItem>
+                <SelectItem value="chatbot">{t('products.filter.chatbot')}</SelectItem>
+                <SelectItem value="code">{t('products.filter.code')}</SelectItem>
+                <SelectItem value="image">{t('products.filter.image')}</SelectItem>
+                <SelectItem value="audio">{t('products.filter.audio')}</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
         </section>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -137,6 +151,16 @@ const ProductsPage: NextPage = () => {
                   >
                     {t('products.card.viewDetails')}
                   </Link>
+                </div>
+                <div className="mt-6">
+                  <Button
+                    variant="outline"
+                    className="w-full justify-start"
+                    onClick={() => router.push(`/products/${product.id}/versions/${product.version}`)}
+                  >
+                    <History className="w-4 h-4 mr-2" />
+                    版本历史
+                  </Button>
                 </div>
               </div>
             ))
