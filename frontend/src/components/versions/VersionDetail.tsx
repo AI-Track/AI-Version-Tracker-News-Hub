@@ -5,22 +5,6 @@ interface VersionDetailProps {
   version: ProductVersion;
 }
 
-// 建议的文章接口定义 / Suggested Article Interface
-interface Article {
-  id: string;
-  title: string;
-  content: string;
-  summary: string;
-  author: string;
-  publishDate: Date;
-  status: 'draft' | 'published' | 'archived';
-  categories: string[];
-  tags: string[];
-  source: string;
-  lastModified: Date;
-  language: 'en' | 'zh';
-}
-
 export function VersionDetail({ version }: VersionDetailProps) {
   return (
     <div className="space-y-8">
@@ -87,4 +71,20 @@ export function VersionDetail({ version }: VersionDetailProps) {
       )}
     </div>
   );
+}
+
+// 建议的文章接口定义 / Suggested Article Interface
+interface Article {
+  id: string;
+  title: string;
+  content: string;
+  summary: string;
+  author: string;
+  publishDate: Date;
+  status: 'draft' | 'published' | 'archived';
+  categories: string[];
+  tags: string[];
+  source: string;
+  lastModified: Date;
+  language: 'en' | 'zh';
 } 

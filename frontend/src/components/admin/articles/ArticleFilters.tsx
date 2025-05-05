@@ -165,4 +165,4 @@ export function ArticleFilters({ filters, onFilterChange }: ArticleFiltersProps)
       </div>
     </Card>
   );
-}
+} 

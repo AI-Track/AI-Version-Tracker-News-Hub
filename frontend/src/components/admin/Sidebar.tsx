@@ -1,73 +1,84 @@
+'use client';
+
 import Link from 'next/link';
-import { useRouter } from 'next/router';
-import { 
-  LayoutDashboard, 
-  FileText, 
-  Newspaper, 
-  Settings,
+import { usePathname } from 'next/navigation';
+import { cn } from '@/lib/utils';
+import {
+  LayoutDashboard,
+  FileText,
+  Tags,
   Users,
-  Tag
+  Settings,
+  Newspaper,
+  Bot,
 } from 'lucide-react';
 
 const menuItems = [
   {
     title: '仪表盘',
+    href: '/admin',
     icon: LayoutDashboard,
-    href: '/admin/dashboard',
   },
   {
     title: '文章管理',
-    icon: FileText,
     href: '/admin/articles',
+    icon: FileText,
   },
   {
     title: '新闻管理',
-    icon: Newspaper,
     href: '/admin/news',
+    icon: Newspaper,
   },
   {
-    title: '用户管理',
-    icon: Users,
-    href: '/admin/users',
+    title: 'AI 产品',
+    href: '/admin/products',
+    icon: Bot,
   },
   {
     title: '标签管理',
-    icon: Tag,
     href: '/admin/tags',
+    icon: Tags,
+  },
+  {
+    title: '用户管理',
+    href: '/admin/users',
+    icon: Users,
   },
   {
     title: '系统设置',
-    icon: Settings,
     href: '/admin/settings',
+    icon: Settings,
   },
 ];
 
 export function AdminSidebar() {
-  const router = useRouter();
-  const currentPath = router.pathname;
+  const pathname = usePathname();
 
   return (
-    <div className="h-full py-6">
-      <div className="px-4 mb-8">
-        <h1 className="text-xl font-bold text-white">AI News 管理系统</h1>
+    <div className="py-4 space-y-4">
+      {/* Logo */}
+      <div className="px-6 py-2">
+        <Link href="/admin" className="flex items-center">
+          <span className="text-2xl font-bold">AI News</span>
+        </Link>
       </div>
-      
-      <nav className="space-y-1">
+
+      {/* 导航菜单 */}
+      <nav className="space-y-1 px-2">
         {menuItems.map((item) => {
-          const isActive = currentPath.startsWith(item.href);
-          
+          const isActive = pathname === item.href;
           return (
             <Link
               key={item.href}
               href={item.href}
-              className={`
-                flex items-center px-4 py-3 text-sm
-                ${isActive 
-                  ? 'bg-gray-800 text-white' 
-                  : 'text-gray-300 hover:bg-gray-800 hover:text-white'}
-              `}
+              className={cn(
+                'flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium',
+                isActive
+                  ? 'bg-primary text-primary-foreground'
+                  : 'text-muted-foreground hover:bg-muted hover:text-foreground'
+              )}
             >
-              <item.icon className="w-5 h-5 mr-3" />
+              <item.icon className="h-4 w-4" />
               {item.title}
             </Link>
           );

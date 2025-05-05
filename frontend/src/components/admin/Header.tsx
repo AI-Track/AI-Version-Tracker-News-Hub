@@ -1,3 +1,5 @@
+'use client';
+
 import { Bell, User } from 'lucide-react';
 import {
   DropdownMenu,
@@ -6,44 +8,52 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+} from '@/components/ui/dropdown-menu';
+import { Button } from '@/components/ui/button';
 
 export function AdminHeader() {
   return (
-    <header className="bg-white border-b border-gray-200">
-      <div className="px-6 py-4 flex items-center justify-between">
-        <div>
-          {/* 面包屑导航 */}
-          <h2 className="text-xl font-semibold text-gray-800">管理后台</h2>
-        </div>
-
-        <div className="flex items-center space-x-4">
-          {/* 通知按钮 */}
-          <button className="p-2 hover:bg-gray-100 rounded-full relative">
-            <Bell className="w-5 h-5 text-gray-600" />
-            <span className="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full" />
-          </button>
+    <header className="border-b bg-background">
+      <div className="flex h-16 items-center px-8">
+        <div className="ml-auto flex items-center space-x-4">
+          {/* 通知菜单 */}
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="ghost" size="icon" className="relative">
+                <Bell className="h-5 w-5" />
+                <span className="absolute -right-1 -top-1 h-4 w-4 rounded-full bg-red-500 text-[10px] font-medium text-white flex items-center justify-center">
+                  3
+                </span>
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end" className="w-80">
+              <DropdownMenuLabel>通知</DropdownMenuLabel>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem className="flex flex-col items-start">
+                <div className="font-medium">新文章发布</div>
+                <div className="text-sm text-muted-foreground">GPT-4 Turbo 发布：更强大的多模态能力</div>
+              </DropdownMenuItem>
+              <DropdownMenuItem className="flex flex-col items-start">
+                <div className="font-medium">系统更新</div>
+                <div className="text-sm text-muted-foreground">平台已更新到最新版本</div>
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
 
           {/* 用户菜单 */}
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <button className="flex items-center space-x-2 hover:bg-gray-100 rounded-full p-2">
-                <User className="w-5 h-5 text-gray-600" />
-              </button>
+              <Button variant="ghost" size="icon">
+                <User className="h-5 w-5" />
+              </Button>
             </DropdownMenuTrigger>
-            <DropdownMenuContent align="end" className="w-56">
+            <DropdownMenuContent align="end">
               <DropdownMenuLabel>我的账户</DropdownMenuLabel>
               <DropdownMenuSeparator />
-              <DropdownMenuItem>
-                个人信息
-              </DropdownMenuItem>
-              <DropdownMenuItem>
-                修改密码
-              </DropdownMenuItem>
+              <DropdownMenuItem>个人资料</DropdownMenuItem>
+              <DropdownMenuItem>设置</DropdownMenuItem>
               <DropdownMenuSeparator />
-              <DropdownMenuItem className="text-red-600">
-                退出登录
-              </DropdownMenuItem>
+              <DropdownMenuItem className="text-red-600">退出登录</DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
         </div>

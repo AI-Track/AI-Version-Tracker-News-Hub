@@ -1,10 +1,12 @@
+'use client';
+
 import { useState } from 'react';
 import { AdminLayout } from '@/components/admin/Layout';
 import { ArticleList } from '@/components/admin/articles/ArticleList';
 import { ArticleFilters } from '@/components/admin/articles/ArticleFilters';
 import { Button } from '@/components/ui/button';
 import { Plus, Filter } from 'lucide-react';
-import { useRouter } from 'next/router';
+import { useRouter } from 'next/navigation';
 import type { Article, ArticleFilter, ArticleSort } from '@/types/article';
 
 // 模拟数据
@@ -70,7 +72,7 @@ export default function ArticlesPage() {
 
   // 新建文章
   const handleCreateArticle = () => {
-    router.push('/admin/articles/create');
+    router.push('/admin/articles/new/edit');
   };
 
   // 编辑文章
