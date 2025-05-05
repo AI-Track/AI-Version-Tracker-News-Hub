@@ -87,6 +87,7 @@ export function ArticleList({
                 <span>{getSortIcon('viewCount')}</span>
               </button>
             </TableHead>
+            <TableHead>最近更新</TableHead>
             <TableHead className="text-right">操作</TableHead>
           </TableRow>
         </TableHeader>
@@ -118,6 +119,9 @@ export function ArticleList({
                 {article.publishDate ? formatDate(article.publishDate) : '-'}
               </TableCell>
               <TableCell>{article.viewCount}</TableCell>
+              <TableCell>
+                {article.lastModified ? formatDate(article.lastModified) : '-'}
+              </TableCell>
               <TableCell className="text-right">
                 <div className="flex items-center justify-end space-x-2">
                   <Button
