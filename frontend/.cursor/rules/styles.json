@@ -1,0 +1,60 @@
+{
+  "stylingRules": {
+    "framework": {
+      "primary": "tailwindcss",
+      "components": "shadcn/ui"
+    },
+    "conventions": {
+      "className": {
+        "order": [
+          "layout",
+          "positioning",
+          "display",
+          "spacing",
+          "sizing",
+          "typography",
+          "colors",
+          "backgrounds",
+          "borders",
+          "effects",
+          "transitions",
+          "interactivity"
+        ],
+        "examples": {
+          "correct": "flex items-center justify-between p-4 text-sm text-gray-600",
+          "incorrect": "text-gray-600 flex p-4 items-center text-sm justify-between"
+        }
+      },
+      "customization": {
+        "location": "tailwind.config.js",
+        "themeExtension": {
+          "colors": "src/styles/colors.ts",
+          "typography": "src/styles/typography.ts"
+        }
+      }
+    },
+    "components": {
+      "shadcn": {
+        "location": "src/components/ui",
+        "customization": "src/styles/shadcn",
+        "themeSwitching": true
+      }
+    },
+    "darkMode": {
+      "strategy": "class",
+      "classNames": {
+        "light": "light",
+        "dark": "dark"
+      }
+    },
+    "responsive": {
+      "breakpoints": {
+        "sm": "640px",
+        "md": "768px",
+        "lg": "1024px",
+        "xl": "1280px",
+        "2xl": "1536px"
+      }
+    }
+  }
+} 

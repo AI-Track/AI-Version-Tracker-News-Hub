@@ -1,96 +1,102 @@
 import { AdminLayout } from '@/components/layout/admin/AdminLayout';
-import { Card } from '@/components/ui/card';
-import { 
-  FileText, 
-  Users, 
-  Eye, 
-  TrendingUp,
-  ArrowUpRight,
-  ArrowDownRight
-} from 'lucide-react';
-
-// 模拟数据
-const stats = [
-  {
-    title: '文章总数',
-    value: '124',
-    icon: FileText,
-    trend: 'up',
-    change: '+12.5%',
-    timeframe: '较上月'
-  },
-  {
-    title: '总访问量',
-    value: '45.2K',
-    icon: Eye,
-    trend: 'up',
-    change: '+8.2%',
-    timeframe: '较上月'
-  },
-  {
-    title: '活跃用户',
-    value: '3.2K',
-    icon: Users,
-    trend: 'down',
-    change: '-2.4%',
-    timeframe: '较上月'
-  },
-  {
-    title: '转化率',
-    value: '2.4%',
-    icon: TrendingUp,
-    trend: 'up',
-    change: '+4.1%',
-    timeframe: '较上月'
-  }
-];
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { useRouter } from 'next/router';
+import { Newspaper, FileText, Settings, Users } from 'lucide-react';
 
 export default function AdminDashboard() {
+  const router = useRouter();
+
+  const menuItems = [
+    {
+      title: '新闻管理',
+      description: '管理新闻来源、抓取规则和发布状态',
+      icon: <Newspaper className="w-6 h-6" />,
+      href: '/admin/news',
+      color: 'text-blue-500',
+    },
+    {
+      title: '文章管理',
+      description: '管理文章内容、分类和标签',
+      icon: <FileText className="w-6 h-6" />,
+      href: '/admin/articles',
+      color: 'text-green-500',
+    },
+    {
+      title: '用户管理',
+      description: '管理用户账号和权限设置',
+      icon: <Users className="w-6 h-6" />,
+      href: '/admin/users',
+      color: 'text-purple-500',
+    },
+    {
+      title: '系统设置',
+      description: '配置系统参数和基本设置',
+      icon: <Settings className="w-6 h-6" />,
+      href: '/admin/settings',
+      color: 'text-orange-500',
+    },
+  ];
+
   return (
     <AdminLayout>
       <div className="space-y-6">
-        <h1 className="text-2xl font-bold">仪表盘</h1>
-        
-        {/* 统计卡片 */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          {stats.map((stat, index) => (
-            <Card key={index} className="p-6">
-              <div className="flex items-center justify-between">
-                <div className="p-2 bg-primary/10 rounded-lg">
-                  <stat.icon className="w-5 h-5 text-primary" />
-                </div>
-                {stat.trend === 'up' ? (
-                  <div className="flex items-center text-green-600">
-                    <ArrowUpRight className="w-4 h-4" />
-                    <span className="text-sm">{stat.change}</span>
-                  </div>
-                ) : (
-                  <div className="flex items-center text-red-600">
-                    <ArrowDownRight className="w-4 h-4" />
-                    <span className="text-sm">{stat.change}</span>
-                  </div>
-                )}
-              </div>
-              <div className="mt-4">
-                <h3 className="text-sm font-medium text-muted-foreground">
-                  {stat.title}
-                </h3>
-                <p className="text-2xl font-bold">{stat.value}</p>
-                <p className="text-sm text-muted-foreground mt-1">
-                  {stat.timeframe}
+        <div className="flex items-center justify-between">
+          <h1 className="text-2xl font-bold">管理后台</h1>
+        </div>
+
+        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
+          {menuItems.map((item) => (
+            <Card
+              key={item.href}
+              className="cursor-pointer hover:shadow-lg transition-shadow"
+              onClick={() => router.push(item.href)}
+            >
+              <CardHeader className="space-y-1">
+                <CardTitle className="text-xl flex items-center gap-2">
+                  <span className={item.color}>{item.icon}</span>
+                  {item.title}
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <p className="text-sm text-muted-foreground">
+                  {item.description}
                 </p>
-              </div>
+              </CardContent>
             </Card>
           ))}
         </div>
 
-        {/* 最近活动 */}
-        <Card className="p-6">
-          <h2 className="text-lg font-semibold mb-4">最近活动</h2>
-          <div className="space-y-4">
-            {/* 这里可以添加活动列表 */}
+        {/* 数据概览 */}
+        <div className="mt-8">
+          <h2 className="text-xl font-semibold mb-4">数据概览</h2>
+          <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
+            <Card>
+              <CardHeader className="space-y-1">
+                <CardTitle className="text-2xl">2,345</CardTitle>
+                <p className="text-sm text-muted-foreground">今日新闻数</p>
+              </CardHeader>
+            </Card>
+            <Card>
+              <CardHeader className="space-y-1">
+                <CardTitle className="text-2xl">156</CardTitle>
+                <p className="text-sm text-muted-foreground">待审核文章</p>
+              </CardHeader>
+            </Card>
+            <Card>
+              <CardHeader className="space-y-1">
+                <CardTitle className="text-2xl">89%</CardTitle>
+                <p className="text-sm text-muted-foreground">抓取成功率</p>
+              </CardHeader>
+            </Card>
+            <Card>
+              <CardHeader className="space-y-1">
+                <CardTitle className="text-2xl">12,456</CardTitle>
+                <p className="text-sm text-muted-foreground">总访问量</p>
+              </CardHeader>
+            </Card>
           </div>
-        </Card>
+        </div>
       </div>
     </AdminLayout>
   );

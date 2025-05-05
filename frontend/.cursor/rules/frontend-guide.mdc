@@ -1,0 +1,73 @@
+---
+description: 
+globs: 
+alwaysApply: false
+---
+# Frontend Project Guide
+
+## Project Overview
+This is the frontend for the AI-News project, built with Next.js 14, TypeScript, and Tailwind CSS. The project uses modern React patterns and follows a well-organized directory structure.
+
+## Key Technologies
+- Next.js 14 for the React framework
+- TypeScript for type safety
+- Tailwind CSS for styling
+- Shadcn/ui for UI components
+- Zustand for state management
+- React Hook Form for form handling
+- Zod for schema validation
+
+## Directory Structure
+
+### Source Code (`src/`)
+- `components/`: Reusable React components
+- - `components/layout/main/MainLayout.tsx`: the layout components
+- `pages/`: Next.js pages and routing
+- `styles/`: Global styles and Tailwind configurations
+- `hooks/`: Custom React hooks
+- `store/`: Zustand store configurations
+- `services/`: API service integrations
+- `types/`: TypeScript type definitions
+- `utils/`: Utility functions
+- `lib/`: Shared libraries and configurations
+- `i18n/`: Internationalization resources
+- `constants/`: Application constants
+
+### Configuration Files
+- [package.json](mdc:frontend/package.json): Project dependencies and scripts
+- [tsconfig.json](mdc:frontend/tsconfig.json): TypeScript configuration
+- [tailwind.config.js](mdc:frontend/tailwind.config.js): Tailwind CSS configuration
+- [components.json](mdc:frontend/components.json): Shadcn/ui components configuration
+
+## Development Guidelines
+
+### Component Structure
+- Use functional components with TypeScript
+- Follow the Shadcn/ui component patterns
+- Implement proper type definitions
+- Use React hooks for state management
+
+### Styling
+- Use Tailwind CSS classes
+- Follow the project's design system
+- Utilize the shadcn/ui component library
+
+### State Management
+- Use Zustand for global state
+- Implement React hooks for local state
+- Follow proper state management patterns
+
+### Form Handling
+- Use React Hook Form for form management
+- Implement Zod schemas for validation
+- Follow proper form submission patterns
+
+### API Integration
+- Use the services directory for API calls
+- Implement proper error handling
+- Follow RESTful practices
+
+### Performance
+- Implement proper code splitting
+- Use Next.js Image component for images
+- Follow React best practices for optimization
