@@ -1,13 +1,13 @@
 import { NextPage } from 'next';
 import Head from 'next/head';
-import Layout from '@/components/layout/Layout';
+import { MainLayout } from '@/components/layout/main/MainLayout';
 import { useTranslation } from '@/hooks/useTranslation';
 
 const VersionsPage: NextPage = () => {
   const { t } = useTranslation();
 
   return (
-    <Layout>
+    <MainLayout>
       <Head>
         <title>{t('versions.title')} | {t('layout.title')}</title>
         <meta name="description" content={t('versions.subtitle')} />
@@ -135,7 +135,7 @@ const VersionsPage: NextPage = () => {
           </div>
         </section>
       </div>
-    </Layout>
+    </MainLayout>
   );
 };
 

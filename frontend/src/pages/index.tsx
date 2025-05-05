@@ -1,10 +1,11 @@
 import { NextPage } from 'next';
 import Head from 'next/head';
-import Layout from '@/components/layout/Layout';
+import { MainLayout } from '@/components/layout/main/MainLayout';
 import { useState, useEffect } from 'react';
 import { ChevronLeft, ChevronRight, Clock } from 'lucide-react';
 import Link from 'next/link';
 import { useTranslation } from '@/hooks/useTranslation';
+
 const HomePage: NextPage = () => {
   const [currentSlide, setCurrentSlide] = useState(0);
   const [loading, setLoading] = useState(false);
@@ -67,7 +68,7 @@ const HomePage: NextPage = () => {
   };
 
   return (
-    <Layout>
+    <MainLayout>
       <Head>
         <title>AI Track - Your AI Development Tracker</title>
         <meta name="description" content="Latest AI news and updates" />
@@ -226,7 +227,7 @@ const HomePage: NextPage = () => {
           </div>
         </section>
       </main>
-    </Layout>
+    </MainLayout>
   );
 };
 

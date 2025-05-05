@@ -1,5 +1,5 @@
 import { useRouter } from 'next/router';
-import { Layout } from '@/components/layout';
+import { MainLayout } from '@/components/layout/main/MainLayout';
 import { ProductDetail } from '@/components/products/ProductDetail';
 import { RatingStats } from '@/components/ratings/RatingStats';
 import { RatingForm } from '@/components/ratings/RatingForm';
@@ -24,7 +24,7 @@ export default function ProductDetailPage() {
   const { data: versions } = useProductVersions(id as string);
 
   return (
-    <Layout>
+    <MainLayout>
       <div className="container mx-auto px-4 py-8">
         <div className="grid grid-cols-12 gap-8">
           {/* 主要内容 */}
@@ -105,6 +105,6 @@ export default function ProductDetailPage() {
           </div>
         </div>
       </div>
-    </Layout>
+    </MainLayout>
   );
 }

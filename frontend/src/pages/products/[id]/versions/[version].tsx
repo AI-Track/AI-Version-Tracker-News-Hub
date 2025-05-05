@@ -1,5 +1,5 @@
 import { useRouter } from 'next/router';
-import Layout from '@/components/layout/Layout';
+import { MainLayout } from '@/components/layout/main/MainLayout';
 import { VersionDetail } from '@/components/versions/VersionDetail';
 import { VersionTimeline } from '@/components/versions/VersionTimeline';
 import { useProductVersions } from '@/hooks/useProducts';
@@ -26,7 +26,7 @@ export default function VersionDetailPage() {
   // 加载状态
   if (isLoading) {
     return (
-      <Layout>
+      <MainLayout>
         <div className="container mx-auto px-4 py-8">
           <div className="grid grid-cols-12 gap-6">
             {/* 左侧时间线骨架屏 */}
@@ -50,14 +50,14 @@ export default function VersionDetailPage() {
             </div>
           </div>
         </div>
-      </Layout>
+      </MainLayout>
     );
   }
 
   // 错误状态
   if (error) {
     return (
-      <Layout>
+      <MainLayout>
         <div className="container mx-auto px-4 py-8">
           <div className="text-center">
             <h2 className="text-2xl font-bold text-red-600 mb-4">加载失败</h2>
@@ -70,14 +70,14 @@ export default function VersionDetailPage() {
             </button>
           </div>
         </div>
-      </Layout>
+      </MainLayout>
     );
   }
 
   // 版本未找到
   if (!currentVersion) {
     return (
-      <Layout>
+      <MainLayout>
         <div className="container mx-auto px-4 py-8">
           <div className="text-center">
             <h2 className="text-2xl font-bold mb-4">版本未找到</h2>
@@ -95,12 +95,12 @@ export default function VersionDetailPage() {
             </button>
           </div>
         </div>
-      </Layout>
+      </MainLayout>
     );
   }
 
   return (
-    <Layout>
+    <MainLayout>
       <div className="container mx-auto px-4 py-8">
         <div className="grid grid-cols-12 gap-6">
           {/* 左侧时间线 */}
@@ -118,6 +118,6 @@ export default function VersionDetailPage() {
           </div>
         </div>
       </div>
-    </Layout>
+    </MainLayout>
   );
 } 

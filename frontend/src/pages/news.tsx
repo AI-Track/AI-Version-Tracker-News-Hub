@@ -1,10 +1,10 @@
 import { NextPage } from 'next';
 import Head from 'next/head';
-import Layout from '@/components/layout/Layout';
+import { MainLayout } from '@/components/layout/main/MainLayout';
 
 const NewsPage: NextPage = () => {
   return (
-    <Layout>
+    <MainLayout>
       <Head>
         <title>新闻动态 - AI Tracker</title>
         <meta name="description" content="Latest AI news and updates" />
@@ -105,7 +105,7 @@ const NewsPage: NextPage = () => {
           </div>
         </div>
       </main>
-    </Layout>
+    </MainLayout>
   );
 };
 

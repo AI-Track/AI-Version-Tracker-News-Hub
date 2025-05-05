@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useRouter } from 'next/router';
-import Layout from '@/components/layout/Layout';
+import { MainLayout } from '@/components/layout/main/MainLayout';
 import { ArticleEditor } from '@/components/admin/articles/ArticleEditor';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -80,7 +80,7 @@ export default function ArticleEditPage() {
   };
 
   return (
-    <Layout>
+    <MainLayout>
       <div className="space-y-6">
         <div className="flex items-center justify-between">
           <h1 className="text-2xl font-bold">
@@ -165,6 +165,6 @@ export default function ArticleEditPage() {
           />
         </div>
       </div>
-    </Layout>
+    </MainLayout>
   );
 } 

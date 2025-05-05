@@ -1,5 +1,5 @@
 import { useRouter } from 'next/router';
-import Layout from '@/components/layout/Layout';
+import { MainLayout } from '@/components/layout/main/MainLayout';
 import { NotificationPreferences } from '@/components/subscription/NotificationPreferences';
 import { useSubscriptionStatus, useSubscription } from '@/hooks/useSubscription';
 
@@ -12,7 +12,7 @@ export default function ProductSettingsPage() {
 
   if (!subscriptionStatus?.isSubscribed) {
     return (
-      <Layout>
+      <MainLayout>
         <div className="container mx-auto px-4 py-8">
           <div className="max-w-2xl mx-auto text-center">
             <h1 className="text-3xl font-bold mb-4">未订阅</h1>
@@ -27,12 +27,12 @@ export default function ProductSettingsPage() {
             </button>
           </div>
         </div>
-      </Layout>
+      </MainLayout>
     );
   }
 
   return (
-    <Layout>
+    <MainLayout>
       <div className="container mx-auto px-4 py-8">
         <div className="max-w-2xl mx-auto">
           <h1 className="text-3xl font-bold mb-8">通知设置</h1>
@@ -48,6 +48,6 @@ export default function ProductSettingsPage() {
           )}
         </div>
       </div>
-    </Layout>
+    </MainLayout>
   );
 } 

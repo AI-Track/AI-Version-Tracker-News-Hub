@@ -1,6 +1,6 @@
 import { NextPage } from 'next';
 import Head from 'next/head';
-import Layout from '@/components/layout/Layout';
+import { MainLayout } from '@/components/layout/main/MainLayout';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
 import { Calendar, Clock, Tag, BookOpen, BookOpenCheck } from 'lucide-react';
@@ -59,11 +59,11 @@ const NewsDetailPage: NextPage = () => {
 
   if (!news) {
     return (
-      <Layout>
+      <MainLayout>
         <div className="container mx-auto px-4 py-8">
           <h1 className="text-2xl font-bold">新闻未找到</h1>
         </div>
-      </Layout>
+      </MainLayout>
     );
   }
 
@@ -85,7 +85,7 @@ const NewsDetailPage: NextPage = () => {
   const paragraphs = news.content.trim().split('\n\n');
 
   return (
-    <Layout>
+    <MainLayout>
       <Head>
         <title>{news.title} - AI Tracker</title>
         <meta name="description" content={news.title} />
@@ -160,7 +160,7 @@ const NewsDetailPage: NextPage = () => {
           </div>
         </article>
       </main>
-    </Layout>
+    </MainLayout>
   );
 };
 

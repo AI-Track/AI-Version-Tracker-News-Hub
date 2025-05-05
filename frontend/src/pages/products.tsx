@@ -1,6 +1,6 @@
 import { NextPage } from 'next';
 import Head from 'next/head';
-import Layout from '@/components/layout/Layout';
+import { MainLayout } from '@/components/layout/main/MainLayout';
 import Link from 'next/link';
 import { Button } from "@/components/ui/button";
 import {
@@ -72,7 +72,7 @@ const ProductsPage: NextPage = () => {
   })
 
   return (
-    <Layout>
+    <MainLayout>
       <Head>
         <title>{t('products.title')} | {t('layout.title')}</title>
         <meta name="description" content={t('products.subtitle')} />
@@ -168,7 +168,7 @@ const ProductsPage: NextPage = () => {
         </div>
       </div>
       <Toaster />
-    </Layout>
+    </MainLayout>
   );
 };
 

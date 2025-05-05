@@ -1,5 +1,3 @@
-'use client';
-
 import { Bell, User } from 'lucide-react';
 import {
   DropdownMenu,
@@ -11,7 +9,7 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { Button } from '@/components/ui/button';
 
-export function AdminHeader() {
+export function Header() {
   return (
     <header className="border-b bg-background">
       <div className="flex h-16 items-center px-8">
