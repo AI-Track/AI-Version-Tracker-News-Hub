@@ -76,9 +76,22 @@ export function Sidebar() {
         isCollapsed ? 'justify-center' : 'justify-between'
       )}>
         {!isCollapsed && (
-          <Link href="/admin" className="flex items-center">
-            <span className="text-xl font-bold">AI News</span>
-          </Link>
+
+        <TooltipProvider>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Link href="/" className="flex items-center">
+                  <span className="text-xl font-bold">AI News</span>
+                </Link>
+              </TooltipTrigger>
+              <TooltipContent>
+                <p>返回网站首页</p>
+              </TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
+          
+
+
         )}
         <Button
           variant="ghost"

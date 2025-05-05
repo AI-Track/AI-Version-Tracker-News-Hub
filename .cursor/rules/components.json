@@ -8,6 +8,27 @@
         "layout": "布局组件",
         "products": "产品相关组件",
         "ui": "UI 基础组件"
+      },
+      "layout": {
+        "baseDir": "src/components/layout",
+        "subDirectories": {
+          "admin": {
+            "description": "管理后台布局组件 / Admin layout components",
+            "components": {
+              "AdminLayout.tsx": "主布局组件 / Main layout component",
+              "Header.tsx": "顶部导航组件 / Top navigation component",
+              "Sidebar.tsx": "侧边栏组件 / Sidebar component"
+            }
+          },
+          "main": {
+            "description": "主站布局组件 / Main site layout components",
+            "components": {
+              "MainLayout.tsx": "主站布局 / Main site layout",
+              "Navbar.tsx": "导航栏 / Navigation bar",
+              "Footer.tsx": "页脚 / Footer"
+            }
+          }
+        }
       }
     },
     "naming": {
@@ -24,7 +45,12 @@
           "correct": ["formatDate.ts", "useProducts.ts"],
           "incorrect": ["FormatDate.ts", "use-products.ts"]
         }
-      }
+      },
+      "files": "PascalCase.tsx",
+      "styles": "camelCase",
+      "types": "PascalCase",
+      "interfaces": "IPascalCase",
+      "constants": "UPPER_SNAKE_CASE"
     },
     "implementation": {
       "preferred": {
@@ -51,6 +77,76 @@
           "naming": "camelCase"
         }
       }
+    },
+    "documentation": {
+      "required": {
+        "componentDescription": "组件功能描述 / Component description",
+        "props": "属性定义和说明 / Props definition and description",
+        "examples": "使用示例 / Usage examples",
+        "dependencies": "依赖项 / Dependencies"
+      },
+      "format": {
+        "language": ["中文", "English"],
+        "codeBlocks": "TypeScript/TSX with comments",
+        "markdownStructure": [
+          "# Component Name",
+          "## Description / 描述",
+          "## Props / 属性",
+          "## Examples / 示例",
+          "## Dependencies / 依赖"
+        ]
+      }
+    },
+    "styling": {
+      "framework": "Tailwind CSS",
+      "components": "shadcn/ui",
+      "conventions": {
+        "classNameOrder": [
+          "layout",
+          "positioning",
+          "display",
+          "spacing",
+          "sizing",
+          "typography",
+          "colors",
+          "backgrounds",
+          "borders",
+          "effects",
+          "transitions",
+          "interactivity"
+        ]
+      },
+      "themes": {
+        "configFiles": [
+          "src/styles/globals.css",
+          "tailwind.config.js"
+        ],
+        "customization": {
+          "colors": "src/styles/colors.ts",
+          "typography": "src/styles/typography.ts"
+        }
+      }
+    },
+    "bestPractices": {
+      "general": [
+        "使用语义化的类名 / Use semantic class names",
+        "遵循移动优先原则 / Follow mobile-first approach",
+        "保持组件的单一职责 / Keep components single-responsibility",
+        "使用 TypeScript 类型定义 / Use TypeScript type definitions",
+        "添加适当的注释和文档 / Add appropriate comments and documentation"
+      ],
+      "layout": [
+        "确保响应式设计 / Ensure responsive design",
+        "优化性能和可访问性 / Optimize performance and accessibility",
+        "保持一致的布局结构 / Maintain consistent layout structure",
+        "使用适当的语义化标签 / Use appropriate semantic tags"
+      ],
+      "components": [
+        "组件应该是可重用的 / Components should be reusable",
+        "保持props接口简单明确 / Keep props interface simple and clear",
+        "避免过度抽象 / Avoid over-abstraction",
+        "添加适当的类型定义 / Add appropriate type definitions"
+      ]
     }
   }
 } 
