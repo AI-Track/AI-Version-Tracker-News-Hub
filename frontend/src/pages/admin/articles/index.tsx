@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { AdminLayout } from '@/components/admin/Layout';
+import Layout from '@/components/layout/Layout';
 import { ArticleList } from '@/components/admin/articles/ArticleList';
 import { ArticleFilters } from '@/components/admin/articles/ArticleFilters';
 import { Button } from '@/components/ui/button';
@@ -70,7 +70,7 @@ export default function ArticlesPage() {
 
   // 新建文章
   const handleCreateArticle = () => {
-    router.push('/admin/articles/create');
+    router.push('/admin/articles/new/edit');
   };
 
   // 编辑文章
@@ -85,7 +85,7 @@ export default function ArticlesPage() {
   };
 
   return (
-    <AdminLayout>
+    <Layout>
       <div className="space-y-6">
         {/* 头部操作栏 */}
         <div className="flex items-center justify-between">
@@ -122,6 +122,6 @@ export default function ArticlesPage() {
           onDelete={handleDeleteArticle}
         />
       </div>
-    </AdminLayout>
+    </Layout>
   );
 } 

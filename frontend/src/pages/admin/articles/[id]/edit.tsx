@@ -1,8 +1,6 @@
-'use client';
-
 import { useState } from 'react';
-import { useRouter } from 'next/navigation';
-import { AdminLayout } from '@/components/admin/Layout';
+import { useRouter } from 'next/router';
+import Layout from '@/components/layout/Layout';
 import { ArticleEditor } from '@/components/admin/articles/ArticleEditor';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -35,15 +33,9 @@ const tags = [
   'Google',
 ];
 
-interface Props {
-  params: {
-    id: string;
-  };
-}
-
-export default function ArticleEditPage({ params }: Props) {
+export default function ArticleEditPage() {
   const router = useRouter();
-  const { id } = params;
+  const { id } = router.query;
   
   const [article, setArticle] = useState<Partial<Article>>({
     title: '',
@@ -71,7 +63,6 @@ export default function ArticleEditPage({ params }: Props) {
   const handleSubmit = async (status: Article['status']) => {
     setIsSubmitting(true);
     try {
-      // TODO: 实现保存逻辑
       const updatedArticle = {
         ...article,
         status,
@@ -89,7 +80,7 @@ export default function ArticleEditPage({ params }: Props) {
   };
 
   return (
-    <AdminLayout>
+    <Layout>
       <div className="space-y-6">
         <div className="flex items-center justify-between">
           <h1 className="text-2xl font-bold">
@@ -174,6 +165,6 @@ export default function ArticleEditPage({ params }: Props) {
           />
         </div>
       </div>
-    </AdminLayout>
+    </Layout>
   );
 } 
