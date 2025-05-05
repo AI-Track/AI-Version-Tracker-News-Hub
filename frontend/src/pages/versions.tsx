@@ -26,7 +26,7 @@ const VersionsPage: NextPage = () => {
           <div className="card p-6">
             <div className="flex items-center mb-6">
               <img
-                src="/images/chatgpt-icon.png"
+                src="/logo/chatgpt-icon.png"
                 alt="OpenAI"
                 className="w-12 h-12 rounded-lg mr-4"
               />
@@ -61,7 +61,7 @@ const VersionsPage: NextPage = () => {
           <div className="card p-6">
             <div className="flex items-center mb-6">
               <img
-                src="/images/github-copilot-icon.png"
+                src="/logo/github-copilot-icon.png"
                 alt="GitHub Copilot"
                 className="w-12 h-12 rounded-lg mr-4"
               />
@@ -96,7 +96,7 @@ const VersionsPage: NextPage = () => {
           <div className="card p-6">
             <div className="flex items-center mb-6">
               <img
-                src="/images/cursor-icon.webp"
+                src="/logo/cursor-icon.webp"
                 alt="Cursor"
                 className="w-12 h-12 rounded-lg mr-4"
               />

@@ -1,4 +1,5 @@
-import { Bell, User } from 'lucide-react';
+import { Bell, User, Home } from 'lucide-react';
+import Link from 'next/link';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -8,11 +9,33 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { Button } from '@/components/ui/button';
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 
 export function Header() {
   return (
     <header className="border-b bg-background">
       <div className="flex h-16 items-center px-8">
+        {/* Logo and Home Link */}
+        <div className="flex items-center">
+          <Link href="/" className="flex items-center space-x-2 hover:opacity-80 transition-opacity">
+            <img src={'/logo.svg'} alt="AI News" className="h-8 w-8" />
+            <span className="text-lg font-semibold">AI News</span>
+          </Link>
+          <TooltipProvider>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Link href="/" className="ml-4 p-2 rounded-full hover:bg-accent">
+                  <Home className="h-5 w-5 text-muted-foreground" />
+                </Link>
+              </TooltipTrigger>
+              <TooltipContent>
+                <p>返回网站首页</p>
+              </TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
+        </div>
+
+        {/* Right Side Menu */}
         <div className="ml-auto flex items-center space-x-4">
           {/* 通知菜单 */}
           <DropdownMenu>

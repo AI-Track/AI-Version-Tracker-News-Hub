@@ -59,7 +59,7 @@ export const mockProducts: Record<string, Product> = {
   '1': {
     id: '1',
     name: 'OpenAI GPT-4',
-    logo: '/images/openai.png',
+    logo: '/logo/openai.png',
     type: '聊天机器人',
     currentVersion: 'GPT-4 Turbo',
     lastUpdate: '2024-04-15',

@@ -39,7 +39,7 @@ const ProductsPage: NextPage = () => {
         type: 'chatbot',
         version: 'GPT-4',
         lastUpdate: '2024-03-20',
-        image: '/images/openai.png',
+        image: '/logo/openai.png',
         description: 'Leading AI language model'
       },
       {
@@ -48,7 +48,7 @@ const ProductsPage: NextPage = () => {
         type: 'code',
         version: '2.0',
         lastUpdate: '2024-03-15',
-        image: '/images/github-copilot.png',
+        image: '/logo/github-copilot.png',
         description: 'AI pair programmer'
       },
       {
@@ -57,7 +57,7 @@ const ProductsPage: NextPage = () => {
         type: 'code',
         version: '1.5',
         lastUpdate: '2024-03-18',
-        image: '/images/cursor.webp',
+        image: '/logo/cursor.webp',
         description: 'AI-powered code editor'
       }
     ])
