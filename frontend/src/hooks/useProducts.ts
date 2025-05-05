@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { useApi } from './useApi';
 import { Product, ProductDetail, ProductVersion } from '@/types/product';
 import { useStore } from '@/store';
+import { mockProducts } from '@/lib/mock-data';
 
 // 使用产品列表的 Hook
 export function useProducts() {
@@ -52,35 +53,84 @@ export function useProductDetail(id: string) {
 }
 
 // 使用产品版本的 Hook
-export function useProductVersions(id: string) {
-  return useApi<ProductVersion[]>(`/products/${id}/versions`, 'GET', {
-    enabled: !!id,
-    // Mock data for development
-    onSuccess: (data) => {
-      if (!data || data.length === 0) {
-        return [{
-          version: '1.0.0',
-          date: '2024-03-20',
-          type: 'major',
-          importance: 'high',
-          changes: [
-            '初始版本发布',
-            '基础功能实现',
-          ],
-          details: '这是我们的第一个正式版本，包含了所有基础功能。',
-          features: [
-            {
-              title: '产品列表',
-              description: '支持查看所有产品信息',
-            },
-            {
-              title: '版本管理',
-              description: '支持查看产品版本历史',
-            }
-          ]
-        }];
+export const useProductVersions = (productId: string | undefined) => {
+  const [data, setData] = useState<ProductVersion[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<Error | null>(null);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      if (!productId) {
+        setIsLoading(false);
+        return;
       }
-      return data;
-    }
-  });
-} 
+
+      setIsLoading(true);
+      try {
+        // 模拟 API 请求延迟
+        await new Promise(resolve => setTimeout(resolve, 1000));
+        
+        const product = mockProducts[productId];
+        if (!product) {
+          throw new Error('Product not found');
+        }
+
+        // 确保版本数据存在
+        if (!product.versions || !Array.isArray(product.versions)) {
+          throw new Error('No version data available');
+        }
+        
+        setData(product.versions);
+        setError(null);
+      } catch (err) {
+        setError(err as Error);
+        setData([]);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchData();
+  }, [productId]);
+
+  return { data, isLoading, error };
+};
+
+// 获取单个产品信息的 hook
+export const useProduct = (productId: string | undefined) => {
+  const [data, setData] = useState<Product | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<Error | null>(null);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      if (!productId) {
+        setIsLoading(false);
+        return;
+      }
+
+      setIsLoading(true);
+      try {
+        // 模拟 API 请求延迟
+        await new Promise(resolve => setTimeout(resolve, 800));
+        
+        const product = mockProducts[productId];
+        if (!product) {
+          throw new Error('Product not found');
+        }
+        
+        setData(product);
+        setError(null);
+      } catch (err) {
+        setError(err as Error);
+        setData(null);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchData();
+  }, [productId]);
+
+  return { data, isLoading, error };
+}; 

@@ -21,6 +21,7 @@ This is the frontend for the AI-News project, built with Next.js 14, TypeScript,
 
 ### Source Code (`src/`)
 - `components/`: Reusable React components
+- - `components/layout/Layout.tsx`: the layout components
 - `pages/`: Next.js pages and routing
 - `styles/`: Global styles and Tailwind configurations
 - `hooks/`: Custom React hooks

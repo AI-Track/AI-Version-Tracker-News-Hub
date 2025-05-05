@@ -22,7 +22,7 @@ export function VersionDetail({ version }: VersionDetailProps) {
               version.importance === 'medium' ? 'bg-yellow-100 text-yellow-800' :
               'bg-green-100 text-green-800'
             )}>
-              {version.importance.toUpperCase()}
+              {version?.importance?.toUpperCase()}
             </span>
           </div>
         </div>
