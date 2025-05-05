@@ -1,0 +1,56 @@
+{
+  "componentRules": {
+    "structure": {
+      "baseDir": "frontend/src/components",
+      "directories": {
+        "admin": "管理后台组件",
+        "common": "通用组件",
+        "layout": "布局组件",
+        "products": "产品相关组件",
+        "ui": "UI 基础组件"
+      }
+    },
+    "naming": {
+      "components": {
+        "pattern": "PascalCase",
+        "examples": {
+          "correct": ["ArticleList.tsx", "ProductDetail.tsx"],
+          "incorrect": ["articleList.tsx", "product-detail.tsx"]
+        }
+      },
+      "utilities": {
+        "pattern": "camelCase",
+        "examples": {
+          "correct": ["formatDate.ts", "useProducts.ts"],
+          "incorrect": ["FormatDate.ts", "use-products.ts"]
+        }
+      }
+    },
+    "implementation": {
+      "preferred": {
+        "componentType": "functional",
+        "stateManagement": ["hooks", "zustand"],
+        "styling": ["tailwind", "shadcn"]
+      },
+      "avoided": {
+        "componentType": "class",
+        "stateManagement": ["context", "redux"],
+        "styling": ["css-in-js", "sass"]
+      }
+    },
+    "typescript": {
+      "required": true,
+      "conventions": {
+        "props": {
+          "pattern": "interface",
+          "naming": "ComponentNameProps",
+          "example": "interface ButtonProps {}"
+        },
+        "types": {
+          "location": "src/types",
+          "naming": "camelCase"
+        }
+      }
+    }
+  }
+} 

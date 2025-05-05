@@ -1,0 +1,39 @@
+{
+  "routingRules": {
+    "framework": "next.js",
+    "mode": "pages",
+    "prohibited": ["app-router"],
+    "structure": {
+      "pagesDir": "frontend/src/pages",
+      "layoutDir": "frontend/src/components/layout",
+      "componentsDir": "frontend/src/components"
+    },
+    "conventions": {
+      "dynamicRoutes": {
+        "preferred": "[param]/index.tsx",
+        "avoided": "[param].tsx",
+        "examples": {
+          "correct": [
+            "pages/products/[id]/index.tsx",
+            "pages/products/[id]/edit/index.tsx",
+            "pages/products/[id]/settings.tsx"
+          ],
+          "incorrect": [
+            "pages/products/[id].tsx",
+            "pages/products/[slug].tsx"
+          ]
+        }
+      },
+      "apiRoutes": {
+        "preferred": "api/[resource]/[id]/index.ts",
+        "avoided": "api/[resource]/[id].ts"
+      }
+    },
+    "imports": {
+      "routing": {
+        "preferred": "next/router",
+        "avoided": "next/navigation"
+      }
+    }
+  }
+} 
