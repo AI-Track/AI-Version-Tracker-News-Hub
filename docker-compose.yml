@@ -23,12 +23,16 @@ services:
       - "4000:4000"
     volumes:
       - ./backend:/app
-      - /app/node_modules
     environment:
-      - NODE_ENV=development
-      - MONGODB_URI=mongodb://mongodb:27017/ai-news
+      - GIN_MODE=debug
+      - MONGODB_URI=mongodb://mongodb:27017/ai_tracker
+      - MYSQL_DSN=root:password@tcp(mysql:3306)/ai_tracker?charset=utf8mb4&parseTime=True&loc=Local
+      - REDIS_URL=redis:6379
+      - JWT_SECRET=your-super-secret-key-change-in-production
     depends_on:
       - mongodb
+      - mysql
+      - redis
 
   crawler:
     build:
@@ -36,12 +40,15 @@ services:
       dockerfile: Dockerfile
     volumes:
       - ./crawler:/app
-      - /app/node_modules
     environment:
-      - NODE_ENV=development
-      - MONGODB_URI=mongodb://mongodb:27017/ai-news
+      - PYTHON_ENV=development
+      - MONGODB_URI=mongodb://mongodb:27017/ai_tracker
+      - REDIS_URL=redis://redis:6379/0
+      - BACKEND_API_URL=http://backend:4000/api/v1
     depends_on:
       - mongodb
+      - redis
+      - backend
 
   mongodb:
     image: mongo:latest
@@ -50,5 +57,24 @@ services:
     volumes:
       - mongodb_data:/data/db
 
+  mysql:
+    image: mysql:8.0
+    ports:
+      - "3306:3306"
+    environment:
+      - MYSQL_ROOT_PASSWORD=password
+      - MYSQL_DATABASE=ai_tracker
+    volumes:
+      - mysql_data:/var/lib/mysql
+
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+
 volumes:
-  mongodb_data: 
+  mongodb_data:
+  mysql_data:
+  redis_data: 
