@@ -2,13 +2,19 @@
 export interface Product {
   id: string;
   name: string;
+  description: string;
+  fullDescription: string;
+  icon: string;
+  currentVersion: string;
+  lastUpdated: string;
+  category: string;
+  subscriberCount: number;
+  features: string[];
+  rating?: number;
+  ratingCount?: number;
   logo: string;
   type: string;
-  currentVersion: string;
   lastUpdate: string;
-  description: string;
-  features: string[];
-  versions: ProductVersion[];
   feedback: ProductFeedback[];
   settings: ProductSettings;
   stats: {
@@ -57,10 +63,16 @@ export interface ProductRating {
 export interface ProductFeedback {
   id: string;
   userId: string;
-  rating: number;
-  comment: string;
-  date: string;
-  version: string;
+  productId: string;
+  title: string;
+  description: string;
+  type: 'bug' | 'feature' | 'improvement';
+  votes: {
+    up: number;
+    down: number;
+  };
+  createdAt: string;
+  status: 'open' | 'in-progress' | 'completed' | 'declined';
 }
 
 // 订阅类型

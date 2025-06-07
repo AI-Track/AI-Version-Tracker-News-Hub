@@ -1,5 +1,5 @@
 import { useRouter } from 'next/router';
-import { Layout } from '@/components/layout';
+import { MainLayout } from '@/components/layout/main/MainLayout';
 import { FeedbackForm } from '@/components/feedback/FeedbackForm';
 import { FeedbackList } from '@/components/feedback/FeedbackList';
 import { useProductFeedback } from '@/hooks/useFeedback';
@@ -26,10 +26,7 @@ export default function ProductFeedbackPage() {
               <h2 className="text-xl font-semibold mb-4">提交反馈</h2>
               <FeedbackForm
                 productId={id as string}
-                onSubmit={async (data) => {
-                  await submitFeedback(data);
-                  refetch();
-                }}
+                onSubmit={submitFeedback}
                 isSubmitting={isSubmitting}
               />
             </div>
