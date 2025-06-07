@@ -18,7 +18,7 @@ export function MainLayout({ children }: MainLayoutProps) {
 
   const navItems = [
     { href: '/products', label: t('layout.products') },
-    { href: '/versions', label: t('layout.versions') },
+    // { href: '/', label: t('layout.news') },
   ];
 
   return (
@@ -57,12 +57,12 @@ export function MainLayout({ children }: MainLayoutProps) {
           </div>
         </main>
 
-        <footer className="bg-gray-100 py-8">
+        <footer className="border-t bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 py-8">
           <div className="container mx-auto px-4">
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
               <div>
                 <h3 className="text-lg font-semibold mb-4">关于我们</h3>
-                <p className="text-gray-600">
+                <p className="text-muted-foreground">
                   AI Tracker & News Hub 致力于为开发者提供最新的 AI 产品更新和新闻资讯。
                 </p>
               </div>
@@ -71,31 +71,26 @@ export function MainLayout({ children }: MainLayoutProps) {
                 <h3 className="text-lg font-semibold mb-4">快速链接</h3>
                 <ul className="space-y-2">
                   <li>
-                    <Link href="/versions" className="text-gray-600 hover:text-primary-600">
-                      版本更新
-                    </Link>
-                  </li>
-                  <li>
-                    <Link href="/news" className="text-gray-600 hover:text-primary-600">
-                      新闻动态
-                    </Link>
-                  </li>
-                  <li>
-                    <Link href="/products" className="text-gray-600 hover:text-primary-600">
+                    <Link href="/products" className="text-muted-foreground hover:text-primary">
                       产品追踪
                     </Link>
                   </li>
+                  {/* <li>
+                    <Link href="/news" className="text-muted-foreground hover:text-primary">
+                      新闻动态
+                    </Link>
+                  </li> */}
                 </ul>
               </div>
 
               <div>
                 <h3 className="text-lg font-semibold mb-4">联系我们</h3>
-                <p className="text-gray-600">
+                <p className="text-muted-foreground">
                   如有任何问题或建议，请通过以下方式联系我们：
                 </p>
                 <ul className="mt-2 space-y-2">
                   <li>
-                    <a href="https://github.com/AI-Track/AI-Version-Tracker-News-Hub" className="text-gray-600 hover:text-primary-600">
+                    <a href="https://github.com/AI-Track/AI-Version-Tracker-News-Hub" className="text-muted-foreground hover:text-primary">
                       GitHub
                     </a>
                   </li>
@@ -103,7 +98,7 @@ export function MainLayout({ children }: MainLayoutProps) {
               </div>
             </div>
 
-            <div className="mt-8 pt-8 border-t border-gray-200 text-center text-gray-600">
+            <div className="mt-8 pt-8 border-t border-border text-center text-muted-foreground">
               <p>&copy; {new Date().getFullYear()} AI Tracker & News Hub. All rights reserved.</p>
             </div>
           </div>

@@ -1,5 +1,6 @@
 import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
+import { ProductListItem } from '@/types/product'
 
 interface NewsState {
   news: Array<{
@@ -20,16 +21,8 @@ interface NewsState {
 }
 
 interface ProductState {
-  products: Array<{
-    id: string
-    name: string
-    type: string
-    version: string
-    lastUpdate: string
-    image: string
-    description: string
-  }>
-  setProducts: (products: ProductState['products']) => void
+  products: ProductListItem[]
+  setProducts: (products: ProductListItem[]) => void
   selectedCategory: string | null
   setSelectedCategory: (category: string | null) => void
   searchQuery: string

@@ -17,6 +17,7 @@ import { useStore } from '../store';
 import { useEffect } from 'react';
 import { useTranslation } from '@/hooks/useTranslation';
 import { useRouter } from 'next/router';
+import { ProductListItem } from '@/types/product';
 
 const ProductsPage: NextPage = () => {
   const { t } = useTranslation();
@@ -31,45 +32,58 @@ const ProductsPage: NextPage = () => {
   const router = useRouter();
 
   useEffect(() => {
-    // Mock data - replace with actual API call
-    setProducts([
+    // Mock data - 使用统一的字段名称
+    const mockProducts: ProductListItem[] = [
       {
         id: '1',
         name: 'OpenAI',
         type: 'chatbot',
-        version: 'GPT-4',
-        lastUpdate: '2024-03-20',
-        image: '/logo/openai.png',
-        description: 'Leading AI language model'
+        category: 'AI Assistant',
+        currentVersion: 'GPT-4',
+        lastUpdated: '2024-03-20',
+        icon: '/logo/openai.png',
+        description: 'Leading AI language model',
+        subscriberCount: 1500000,
+        rating: 4.8,
+        ratingCount: 25000
       },
       {
         id: '2',
         name: 'GitHub Copilot',
         type: 'code',
-        version: '2.0',
-        lastUpdate: '2024-03-15',
-        image: '/logo/github-copilot.png',
-        description: 'AI pair programmer'
+        category: 'Code Assistant',
+        currentVersion: '2.0',
+        lastUpdated: '2024-03-15',
+        icon: '/logo/github-copilot.png',
+        description: 'AI pair programmer',
+        subscriberCount: 800000,
+        rating: 4.6,
+        ratingCount: 18000
       },
       {
         id: '3',
         name: 'Cursor',
         type: 'code',
-        version: '1.5',
-        lastUpdate: '2024-03-18',
-        image: '/logo/cursor.webp',
-        description: 'AI-powered code editor'
+        category: 'Code Editor',
+        currentVersion: '1.5',
+        lastUpdated: '2024-03-18',
+        icon: '/logo/cursor.webp',
+        description: 'AI-powered code editor',
+        subscriberCount: 250000,
+        rating: 4.7,
+        ratingCount: 8500
       }
-    ])
-  }, [])
+    ];
+    setProducts(mockProducts);
+  }, [setProducts]);
 
   const filteredProducts = products.filter(product => {
-    const matchesCategory = !selectedCategory || product.type === selectedCategory
+    const matchesCategory = !selectedCategory || selectedCategory === 'all' || product.type === selectedCategory;
     const matchesSearch = !searchQuery || 
       product.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      product.description.toLowerCase().includes(searchQuery.toLowerCase())
-    return matchesCategory && matchesSearch
-  })
+      product.description.toLowerCase().includes(searchQuery.toLowerCase());
+    return matchesCategory && matchesSearch;
+  });
 
   return (
     <MainLayout>
@@ -93,13 +107,6 @@ const ProductsPage: NextPage = () => {
             <Select 
               defaultValue="all" 
               onValueChange={setSelectedCategory}
-              options={[
-                { label: t('products.filter.all'), value: 'all' },
-                { label: t('products.filter.chatbot'), value: 'chatbot' },
-                { label: t('products.filter.code'), value: 'code' },
-                { label: t('products.filter.image'), value: 'image' },
-                { label: t('products.filter.audio'), value: 'audio' }
-              ]}
             >
               <SelectTrigger className="w-48 rounded-full text-base bg-background border border-input focus:ring-2 focus:ring-primary/30 transition-all">
                 <SelectValue placeholder={t('products.filter.title')} />
@@ -125,7 +132,7 @@ const ProductsPage: NextPage = () => {
               <div key={product.id} className="card p-6 rounded-2xl shadow-lg bg-card transition-transform hover:scale-105 hover:shadow-2xl flex flex-col">
                 <div className="flex items-center mb-4">
                   <img
-                    src={product.image}
+                    src={product.icon}
                     alt={product.name}
                     className="w-14 h-14 rounded-xl mr-4 object-cover"
                   />
@@ -134,16 +141,31 @@ const ProductsPage: NextPage = () => {
                     <p className="text-sm text-muted-foreground">{t(`products.filter.${product.type}`)}</p>
                   </div>
                 </div>
+                
                 <div className="space-y-2 flex-1">
                   <div className="flex justify-between">
                     <span className="text-muted-foreground">{t('products.card.currentVersion')}</span>
-                    <span className="font-medium">{product.version}</span>
+                    <span className="font-medium">{product.currentVersion}</span>
                   </div>
                   <div className="flex justify-between">
                     <span className="text-muted-foreground">{t('products.card.lastUpdate')}</span>
-                    <span className="text-muted-foreground">{product.lastUpdate}</span>
+                    <span className="text-muted-foreground">{product.lastUpdated}</span>
+                  </div>
+                  
+                  {/* 显示评分和订阅数 */}
+                  <div className="flex justify-between">
+                    <span className="text-muted-foreground">评分</span>
+                    <div className="flex items-center space-x-1">
+                      <span className="font-medium">{product.rating}</span>
+                      <span className="text-xs text-muted-foreground">({product.ratingCount?.toLocaleString()})</span>
+                    </div>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-muted-foreground">订阅数</span>
+                    <span className="font-medium">{product.subscriberCount.toLocaleString()}</span>
                   </div>
                 </div>
+                
                 <div className="mt-6">
                   <Link
                     href={`/products/${product.id}`}
@@ -152,11 +174,12 @@ const ProductsPage: NextPage = () => {
                     {t('products.card.viewDetails')}
                   </Link>
                 </div>
-                <div className="mt-6">
+                
+                <div className="mt-3">
                   <Button
                     variant="outline"
                     className="w-full justify-start"
-                    onClick={() => router.push(`/products/${product.id}/versions/${product.version}`)}
+                    onClick={() => router.push(`/products/${product.id}/versions`)}
                   >
                     <History className="w-4 h-4 mr-2" />
                     版本历史

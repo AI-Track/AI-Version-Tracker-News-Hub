@@ -1,28 +1,11 @@
 import { ApiService, ApiResponse } from '@/lib/api-client';
-
-// 产品类型
-export interface Product {
-  id: string;
-  name: string;
-  type: string;
-  version: string;
-  lastUpdate: string;
-  image: string;
-  description: string;
-}
-
-// 产品详情类型
-export interface ProductDetail extends Product {
-  features: string[];
-  versions: ProductVersion[];
-}
-
-// 产品版本类型
-export interface ProductVersion {
-  version: string;
-  date: string;
-  changes: string[];
-}
+import { 
+  ProductListItem, 
+  ProductDetail, 
+  ProductVersion,
+  // 为了向后兼容，仍然导入 Product 类型
+  Product 
+} from '@/types/product';
 
 // 产品服务类
 export class ProductService extends ApiService {
@@ -30,9 +13,9 @@ export class ProductService extends ApiService {
     super('/products');
   }
 
-  // 获取所有产品
-  async getAllProducts(): Promise<ApiResponse<Product[]>> {
-    return this.getAll<Product>();
+  // 获取所有产品（返回产品列表项）
+  async getAllProducts(): Promise<ApiResponse<ProductListItem[]>> {
+    return this.getAll<ProductListItem>();
   }
 
   // 获取产品详情
@@ -46,18 +29,28 @@ export class ProductService extends ApiService {
   }
 
   // 创建产品
-  async createProduct(product: Omit<Product, 'id'>): Promise<ApiResponse<Product>> {
-    return this.create<Product>(product);
+  async createProduct(product: Omit<ProductListItem, 'id'>): Promise<ApiResponse<ProductListItem>> {
+    return this.create<ProductListItem>(product);
   }
 
   // 更新产品
-  async updateProduct(id: string, product: Partial<Product>): Promise<ApiResponse<Product>> {
-    return this.update<Product>(id, product);
+  async updateProduct(id: string, product: Partial<ProductListItem>): Promise<ApiResponse<ProductListItem>> {
+    return this.update<ProductListItem>(id, product);
   }
 
   // 删除产品
   async deleteProduct(id: string): Promise<ApiResponse<void>> {
     return this.delete(id);
+  }
+
+  // 获取产品的特定版本信息
+  async getProductVersion(id: string, version: string): Promise<ApiResponse<ProductVersion>> {
+    return this.client.get<ProductVersion>(`${this.baseEndpoint}/${id}/versions/${version}`);
+  }
+
+  // 订阅产品更新
+  async subscribeToProduct(id: string, email: string): Promise<ApiResponse<void>> {
+    return this.client.post<void>(`${this.baseEndpoint}/${id}/subscribe`, { data: { email } });
   }
 }
 

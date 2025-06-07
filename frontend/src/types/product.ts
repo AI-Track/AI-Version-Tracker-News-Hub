@@ -1,36 +1,39 @@
-// 产品类型
-export interface Product {
+// 基础产品类型
+export interface BaseProduct {
   id: string;
   name: string;
   description: string;
-  fullDescription: string;
-  icon: string;
+  category: string;
+  type: string;
   currentVersion: string;
   lastUpdated: string;
-  category: string;
-  subscriberCount: number;
-  features: string[];
-  rating?: number;
-  ratingCount?: number;
-  logo: string;
-  type: string;
-  lastUpdate: string;
-  feedback: ProductFeedback[];
-  settings: ProductSettings;
-  stats: {
-    totalUsers: number;
-    averageRating: number;
-    totalVersions: number;
-    lastMonthUpdates: number;
-  };
-  version?: string;  // 兼容旧版本
-  image?: string;    // 兼容旧版本
+  icon: string;
+  logo?: string; // 可选的大尺寸logo，用于详情页展示
 }
 
-// 产品详情类型
-export interface ProductDetail extends Product {
+// 产品列表项 (用于列表展示)
+export interface ProductListItem extends BaseProduct {
+  subscriberCount: number;
+  rating?: number;
+  ratingCount?: number;
+}
+
+// 产品统计信息
+export interface ProductStats {
+  totalUsers: number;
+  averageRating: number;
+  totalVersions: number;
+  lastMonthUpdates: number;
+}
+
+// 产品详情 (用于详情页)
+export interface ProductDetail extends ProductListItem {
+  fullDescription: string;
   features: string[];
   versions: ProductVersion[];
+  feedback: ProductFeedback[];
+  settings: ProductSettings;
+  stats: ProductStats;
 }
 
 // 产品版本类型
@@ -46,6 +49,7 @@ export interface ProductVersion {
   features?: Array<{
     title: string;
     description: string;
+    image?: string;
   }>;
 }
 
@@ -107,4 +111,13 @@ export interface ProductSettings {
     autoRenew: boolean;
     expiryDate: string;
   };
+}
+
+// 为了兼容性，保留旧的 Product 类型（但标记为废弃）
+/** @deprecated 请使用 ProductListItem 或 ProductDetail */
+export interface Product extends ProductDetail {
+  // 保留一些旧字段以兼容现有代码
+  version?: string;  // 兼容旧版本，请使用 currentVersion
+  image?: string;    // 兼容旧版本，请使用 icon
+  lastUpdate?: string; // 兼容旧版本，请使用 lastUpdated
 } 
