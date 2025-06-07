@@ -10,10 +10,16 @@ export interface ProductVersion {
 export interface ProductFeedback {
   id: string;
   userId: string;
-  rating: number;
-  comment: string;
-  date: string;
-  version: string;
+  productId: string;
+  title: string;
+  description: string;
+  type: 'bug' | 'feature' | 'improvement';
+  votes: {
+    up: number;
+    down: number;
+  };
+  createdAt: string;
+  status: 'open' | 'in-progress' | 'completed' | 'declined';
 }
 
 export interface ProductSettings {
@@ -99,18 +105,30 @@ export const mockProducts: Record<string, Product> = {
       {
         id: 'f1',
         userId: 'user1',
-        rating: 5,
-        comment: '新版本的响应速度确实提升很多',
-        date: '2024-04-16',
-        version: 'GPT-4 Turbo'
+        productId: '1',
+        title: '响应速度提升',
+        description: '新版本的响应速度确实提升很多',
+        type: 'improvement',
+        votes: {
+          up: 5,
+          down: 0
+        },
+        createdAt: '2024-04-16',
+        status: 'completed'
       },
       {
         id: 'f2',
         userId: 'user2',
-        rating: 4,
-        comment: '代码生成能力有明显提升',
-        date: '2024-04-15',
-        version: 'GPT-4 Turbo'
+        productId: '1',
+        title: '代码生成能力提升',
+        description: '代码生成能力有明显提升',
+        type: 'feature',
+        votes: {
+          up: 3,
+          down: 1
+        },
+        createdAt: '2024-04-15',
+        status: 'completed'
       }
     ],
     settings: {
@@ -171,10 +189,16 @@ export const mockProducts: Record<string, Product> = {
       {
         id: 'f3',
         userId: 'user3',
-        rating: 5,
-        comment: '多模态支持非常实用',
-        date: '2024-03-15',
-        version: 'Claude 3 Opus'
+        productId: '2',
+        title: '多模态支持',
+        description: '多模态支持非常实用',
+        type: 'feature',
+        votes: {
+          up: 8,
+          down: 0
+        },
+        createdAt: '2024-03-15',
+        status: 'completed'
       }
     ],
     settings: {

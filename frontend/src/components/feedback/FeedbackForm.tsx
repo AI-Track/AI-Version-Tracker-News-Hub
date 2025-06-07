@@ -1,12 +1,16 @@
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
-import { Select } from '@/components/ui/select';
+import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from '@/components/ui/select';
 import { ProductFeedback } from '@/types/product';
 
 interface FeedbackFormProps {
   productId: string;
-  onSubmit: (feedback: Omit<ProductFeedback, 'id' | 'userId' | 'votes' | 'createdAt' | 'status'>) => Promise<void>;
+  onSubmit: (data: {
+    title: string;
+    description: string;
+    type: 'bug' | 'feature' | 'improvement';
+  }) => Promise<void>;
   isSubmitting?: boolean;
 }
 
@@ -26,7 +30,6 @@ export function FeedbackForm({ productId, onSubmit, isSubmitting }: FeedbackForm
     if (!title || !description) return;
     
     await onSubmit({
-      productId,
       title,
       description,
       type,
@@ -53,11 +56,18 @@ export function FeedbackForm({ productId, onSubmit, isSubmitting }: FeedbackForm
 
       <div className="space-y-2">
         <label className="text-sm font-medium">类型</label>
-        <Select
-          value={type}
-          onValueChange={(value) => setType(value as typeof type)}
-          options={feedbackTypes}
-        />
+        <Select value={type} onValueChange={(value) => setType(value as typeof type)}>
+          <SelectTrigger>
+            <SelectValue placeholder="选择反馈类型" />
+          </SelectTrigger>
+          <SelectContent>
+            {feedbackTypes.map((option) => (
+              <SelectItem key={option.value} value={option.value}>
+                {option.label}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
       </div>
 
       <div className="space-y-2">
