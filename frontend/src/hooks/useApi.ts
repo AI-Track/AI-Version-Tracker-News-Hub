@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useMemo } from 'react';
 import { ApiResponse, ApiError, apiClient } from '@/lib/api-client';
 import { toast } from '@/hooks/use-toast';
 
@@ -129,6 +129,12 @@ export function useApiWithParams<T = any, P extends Record<string, string | numb
   const [error, setError] = useState<ApiError | null>(null);
   const [status, setStatus] = useState<RequestStatus>('idle');
 
+  // 使用 useMemo 来稳定参数的序列化值
+  const serializedParams = useMemo(() => 
+    params ? JSON.stringify(params) : '', 
+    [params]
+  );
+
   // 执行请求的函数
   const fetchData = useCallback(async () => {
     if (!enabled) return;
@@ -138,22 +144,23 @@ export function useApiWithParams<T = any, P extends Record<string, string | numb
 
     try {
       let response: ApiResponse<T>;
+      const requestParams = params || {};
 
       switch (method) {
         case 'GET':
-          response = await apiClient.get<T>(endpoint, { params });
+          response = await apiClient.get<T>(endpoint, { params: requestParams });
           break;
         case 'POST':
-          response = await apiClient.post<T>(endpoint, { data: params });
+          response = await apiClient.post<T>(endpoint, { data: requestParams });
           break;
         case 'PUT':
-          response = await apiClient.put<T>(endpoint, { data: params });
+          response = await apiClient.put<T>(endpoint, { data: requestParams });
           break;
         case 'PATCH':
-          response = await apiClient.patch<T>(endpoint, { data: params });
+          response = await apiClient.patch<T>(endpoint, { data: requestParams });
           break;
         case 'DELETE':
-          response = await apiClient.delete<T>(endpoint, { params });
+          response = await apiClient.delete<T>(endpoint, { params: requestParams });
           break;
         default:
           throw new Error(`Unsupported method: ${method}`);
@@ -181,7 +188,7 @@ export function useApiWithParams<T = any, P extends Record<string, string | numb
         onError(apiError);
       }
     }
-  }, [endpoint, method, params, enabled, onSuccess, onError, showToast]);
+  }, [endpoint, method, serializedParams, enabled, onSuccess, onError, showToast]);
 
   // 初始加载
   useEffect(() => {

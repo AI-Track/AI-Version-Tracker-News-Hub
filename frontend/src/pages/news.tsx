@@ -26,7 +26,7 @@ const NewsPage: NextPage = () => {
               <div className="card">
                 <div className="relative h-48 mb-4">
                   <img
-                    src="/images/placeholder.jpg"
+                    src="/images/placeholder.svg"
                     alt="Featured news"
                     className="w-full h-full object-cover rounded-lg"
                   />

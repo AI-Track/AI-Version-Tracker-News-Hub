@@ -12,53 +12,69 @@ AI 新闻和版本追踪平台，帮助用户实时了解 AI 领域的最新动�
 
 ## 技术架构
 
-- 前端：Next.js (Pages Router)
-- 后端：Node.js + Express
-- 数据库：MongoDB
-- 爬虫：Python + Scrapy
-- 部署：Docker + Docker Compose
+- **前端**：Next.js 14 (Pages Router) + TypeScript + Tailwind CSS
+- **后端**：Go + Gin + GORM + JWT认证
+- **数据库**：MySQL (关系数据) + MongoDB (文档数据) + Redis (缓存)
+- **爬虫**：Python + Scrapy + Celery
+- **部署**：Docker + Docker Compose
 
 ## 快速开始
 
 ### 环境要求
 
 - Node.js 18+
-- PNPM 8+
+- pnpm (推荐) 或 npm
 - Docker & Docker Compose
-- Python 3.8+
+- Go 1.21+
+- Python 3.8+ (爬虫服务)
 
 ### 安装和运行
 
 1. 克隆项目
 ```bash
-git clone https://github.com/yourusername/AI-News.git
-cd AI-News
+git clone <repository-url>
+cd AI-Version-Tracker-News-Hub
 ```
 
-2. 安装依赖
+2. 启动数据库服务
 ```bash
-# 前端依赖
-cd frontend
-pnpm install
-
-# 后端依赖
-cd ../backend
-npm install
-
-# 爬虫依赖
-cd ../crawler
-pip install -r requirements.txt
+# 启动 MySQL, MongoDB, Redis
+docker-compose up -d mysql mongodb redis
 ```
 
-3. 启动开发环境
+3. 启动后端服务
 ```bash
-# 启动所有服务
-docker-compose up -d
-
-# 启动前端开发服务器
-cd frontend
-pnpm dev
+cd backend
+# 设置Go代理（中国用户）
+go env -w GOPROXY=https://goproxy.cn,direct
+go mod tidy
+go run cmd/main.go
 ```
+
+4. 初始化测试数据
+```bash
+# 在另一个终端执行
+docker exec -i ai-version-tracker-news-hub-mysql-1 mysql -u root -ppassword ai_tracker < backend/init.sql
+```
+
+5. 启动前端服务
+```bash
+cd frontend
+pnpm install  # 或 npm install
+pnpm dev      # 或 npm run dev
+```
+
+### 访问地址
+- **前端应用**: http://localhost:3000
+- **后端API**: http://localhost:4000
+- **健康检查**: http://localhost:4000/health
+
+### 测试账号
+| 用户名 | 密码 | 角色 |
+|--------|------|------|
+| admin | password | 管理员 |
+| editor | password | 编辑者 |
+| viewer | password | 查看者 |
 
 ## 项目结构
 
