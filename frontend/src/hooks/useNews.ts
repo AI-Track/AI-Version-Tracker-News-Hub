@@ -120,3 +120,10 @@ export function useArticlesByCategory(category: string, params?: {
     showToast: false,
   });
 }
+// 获取文章详情的 Hook
+export function useArticleDetail(id: string) {
+  return useApi<Article>(`/news/articles/${id}`, 'GET', {
+    enabled: !!id,
+    showToast: false,
+  });
+}
