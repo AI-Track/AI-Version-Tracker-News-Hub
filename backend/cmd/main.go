@@ -101,6 +101,9 @@ func main() {
 		news.GET("/articles", newsHandler.GetArticles)
 		news.GET("/articles/:id", newsHandler.GetArticleByID)
 		news.GET("/featured", newsHandler.GetFeaturedArticles)
+		news.GET("/latest", newsHandler.GetLatestArticles)
+		news.GET("/hot", newsHandler.GetHotArticles)
+		news.GET("/trending", newsHandler.GetTrendingArticles)
 		news.GET("/search", newsHandler.SearchArticles)
 		news.GET("/categories/:category/articles", newsHandler.GetArticlesByCategory)
 		

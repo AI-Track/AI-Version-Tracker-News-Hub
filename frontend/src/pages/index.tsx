@@ -1,31 +1,120 @@
 import { NextPage } from 'next';
 import Head from 'next/head';
+import { NextPage } from 'next';
 import { MainLayout } from '@/components/layout/main/MainLayout';
 import { useState, useEffect, useMemo } from 'react';
 import { ChevronLeft, ChevronRight, Clock } from 'lucide-react';
 import Link from 'next/link';
 import { useTranslation } from '@/hooks/useTranslation';
-import { useFeaturedArticles, useArticles } from '@/hooks/useNews';
+import { useFeaturedArticles, useArticles, useLatestArticles, useHotArticles, useTrendingArticles } from '@/hooks/useNews';
 
 const HomePage: NextPage = () => {
   const [currentSlide, setCurrentSlide] = useState(0);
   const [loading, setLoading] = useState(false);
+  const [activeCategory, setActiveCategory] = useState<'latest' | 'hot' | 'trending'>('latest');
   const { t } = useTranslation();
   
   // 获取特色文章
   const { data: featuredArticles, isLoading: featuredLoading } = useFeaturedArticles();
   
-  // 使用 useMemo 稳定参数对象引用
-  const articlesParams = useMemo(() => ({
-    page: 1,
-    page_size: 6
-  }), []);
+  // 文章列表状态管理
+  const [currentPage, setCurrentPage] = useState(1);
+  const [allArticles, setAllArticles] = useState<Article[]>([]);
+  const [pagination, setPagination] = useState<any>(null);
+  const [isLoadingMore, setIsLoadingMore] = useState(false);
   
-  // 获取最新文章
-  const { data: articlesResponse, isLoading: articlesLoading } = useArticles(articlesParams);
+  // 为每个分类单独管理参数，避免重复请求
+  // 确保切换分类时从第1页开始，加载更多时使用当前页
+  const latestParams = useMemo(() => {
+    if (activeCategory === 'latest') {
+      return { page: currentPage, page_size: 3 };
+    }
+    return undefined;
+  }, [activeCategory, currentPage]);
+  
+  const hotParams = useMemo(() => {
+    if (activeCategory === 'hot') {
+      return { page: currentPage, page_size: 3 };
+    }
+    return undefined;
+  }, [activeCategory, currentPage]);
+  
+  const trendingParams = useMemo(() => {
+    if (activeCategory === 'trending') {
+      return { page: currentPage, page_size: 3 };
+    }
+    return undefined;
+  }, [activeCategory, currentPage]);
+  
+  // 按需加载文章数据 - 只请求当前选择的分类
+  const { data: latestResponse, isLoading: latestLoading, refetch: refetchLatest } = useLatestArticles(latestParams);
+  const { data: hotResponse, isLoading: hotLoading, refetch: refetchHot } = useHotArticles(hotParams);
+  const { data: trendingResponse, isLoading: trendingLoading, refetch: refetchTrending } = useTrendingArticles(trendingParams);
+  
+  // 根据当前选择的分类确定要显示的数据
+  const currentResponse = activeCategory === 'latest' ? latestResponse : 
+                         activeCategory === 'hot' ? hotResponse : trendingResponse;
+  const isInitialLoading = activeCategory === 'latest' ? latestLoading : 
+                          activeCategory === 'hot' ? hotLoading : trendingLoading;
   
   const featuredNews = featuredArticles || [];
-  const newsList = articlesResponse?.data || [];
+  const newsList = allArticles; // 使用累积的文章列表
+  
+  // 调试信息
+  console.log('currentResponse:', currentResponse);
+  console.log('pagination:', pagination);
+  console.log('allArticles length:', allArticles.length);
+
+  // 处理分类切换 - 重置数据
+  useEffect(() => {
+    console.log('分类切换到:', activeCategory);
+    // 立即重置所有相关状态
+    setCurrentPage(1);
+    setAllArticles([]);
+    setPagination(null);
+    setIsLoadingMore(false);
+  }, [activeCategory]);
+
+  // 处理新数据 - 确保正确的时序
+  useEffect(() => {
+    if (currentResponse && Array.isArray(currentResponse)) {
+      console.log(`处理${activeCategory}数据, 第${currentPage}页:`, currentResponse.length, '条');
+      
+      if (currentPage === 1) {
+        // 第一页：直接设置数据
+        setAllArticles(currentResponse);
+        console.log('重置数据为第一页');
+      } else {
+        // 后续页：追加数据（去重）
+        setAllArticles(prev => {
+          // 避免重复添加相同的文章
+          const existingIds = new Set(prev.map(article => article.id));
+          const newArticles = currentResponse.filter(article => !existingIds.has(article.id));
+          const combined = [...prev, ...newArticles];
+          console.log(`追加${newArticles.length}条新数据，总计:`, combined.length, '条');
+          return combined;
+        });
+      }
+      
+      // 设置分页信息
+      setPagination({ 
+        has_next: currentResponse.length >= 3, // 如果返回满页说明可能还有下一页
+        has_prev: currentPage > 1,
+        page: currentPage,
+        page_size: 3,
+        total: 20 // 临时设置，等后续从API获取
+      });
+      setIsLoadingMore(false);
+    }
+  }, [currentResponse, activeCategory, currentPage]);
+
+  // 加载更多函数
+  const handleLoadMore = async () => {
+    if (pagination?.has_next && !isLoadingMore) {
+      setIsLoadingMore(true);
+      setCurrentPage(prev => prev + 1);
+    }
+  };
 
   // 自动轮播
   useEffect(() => {
@@ -154,22 +243,44 @@ const HomePage: NextPage = () => {
                 {t('news.latestNews')}
               </h2>
               <div className="flex items-center space-x-4">
-                <button className="text-sm text-muted-foreground hover:text-primary">
+                <button 
+                  onClick={() => setActiveCategory('latest')}
+                  className={`text-sm transition-colors ${
+                    activeCategory === 'latest' 
+                      ? 'text-primary font-medium' 
+                      : 'text-muted-foreground hover:text-primary'
+                  }`}
+                >
                   {t('news.latestNews')}
                 </button>
-                <button className="text-sm text-muted-foreground hover:text-primary">
+                <button 
+                  onClick={() => setActiveCategory('hot')}
+                  className={`text-sm transition-colors ${
+                    activeCategory === 'hot' 
+                      ? 'text-primary font-medium' 
+                      : 'text-muted-foreground hover:text-primary'
+                  }`}
+                >
                   {t('news.hotNews')}
                 </button>
-                <button className="text-sm text-muted-foreground hover:text-primary">
+                <button 
+                  onClick={() => setActiveCategory('trending')}
+                  className={`text-sm transition-colors ${
+                    activeCategory === 'trending' 
+                      ? 'text-primary font-medium' 
+                      : 'text-muted-foreground hover:text-primary'
+                  }`}
+                >
                   {t('news.trending')}
                 </button>
               </div>
             </div>
             
-            {articlesLoading ? (
+            {/* 初始加载时显示骨架屏 */}
+            {isInitialLoading && allArticles.length === 0 ? (
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {[...Array(6)].map((_, index) => (
-                  <div key={index} className="card overflow-hidden">
+                {[...Array(3)].map((_, index) => (
+                  <div key={`skeleton-${index}`} className="card overflow-hidden">
                     <div className="relative h-48 bg-muted animate-pulse"></div>
                     <div className="p-6">
                       <div className="h-4 bg-muted rounded animate-pulse mb-2"></div>
@@ -183,14 +294,16 @@ const HomePage: NextPage = () => {
                 ))}
               </div>
             ) : newsList.length > 0 ? (
+              <>
+                {/* 文章列表 */}
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {newsList.map((news) => (
+                {newsList.map((news, index) => (
                   <Link
-                    key={news.id}
+                    key={`${activeCategory}-${news.id}`}
                     href={`/news/${news.id}`}
                     className="block"
                   >
-                    <article className="card overflow-hidden hover:shadow-lg transition-shadow">
+                    <article className="card overflow-hidden hover:shadow-lg transition-all duration-300 animate-in slide-in-from-bottom-2" style={{ animationDelay: `${(index % 3) * 100}ms` }}>
                       <div className="relative h-48">
                         <img
                           src={news.cover_image}
@@ -226,24 +339,70 @@ const HomePage: NextPage = () => {
                   </Link>
                 ))}
               </div>
+              
+              {/* 加载更多时的loading状态 */}
+              {isLoadingMore && (
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-6 animate-in fade-in duration-300">
+                  {[...Array(3)].map((_, index) => (
+                    <div key={`loading-${index}`} className="card overflow-hidden animate-in slide-in-from-bottom-2 duration-300" style={{ animationDelay: `${index * 100}ms` }}>
+                      <div className="relative h-48 bg-muted animate-pulse rounded-lg"></div>
+                      <div className="p-6">
+                        <div className="h-4 bg-muted rounded animate-pulse mb-2"></div>
+                        <div className="h-4 bg-muted rounded animate-pulse mb-4 w-3/4"></div>
+                        <div className="flex items-center justify-between">
+                          <div className="h-3 bg-muted rounded animate-pulse w-20"></div>
+                          <div className="h-3 bg-muted rounded animate-pulse w-16"></div>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+              </>
             ) : (
               <div className="text-center py-12">
                 <p className="text-muted-foreground">暂无新闻数据</p>
               </div>
             )}
 
-            {/* Load More */}
+            {/* Load More / No More Data */}
             <div className="mt-12 text-center">
-              <button
-                className="btn-primary"
-                onClick={() => {
-                  setLoading(true);
-                  // 模拟加载更多
-                  setTimeout(() => setLoading(false), 1000);
-                }}
-              >
-                {loading ? t('news.loading') : t('news.loadMore')}
-              </button>
+              {pagination?.has_next ? (
+                isLoadingMore ? (
+                  <div className="flex items-center justify-center space-x-2 text-muted-foreground">
+                    <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-primary"></div>
+                    <span className="text-sm">正在加载更多...</span>
+                  </div>
+                ) : (
+                  <button
+                    className="btn-primary hover:scale-105 transition-transform"
+                    onClick={handleLoadMore}
+                  >
+                    {t('news.loadMore')}
+                  </button>
+                )
+              ) : allArticles.length > 0 ? (
+                <div className="flex flex-col items-center space-y-3 py-4">
+                  <div className="flex items-center space-x-4 w-full max-w-md">
+                    <div className="flex-1 h-px bg-gradient-to-r from-transparent via-border to-border"></div>
+                    <div className="flex items-center space-x-2 text-muted-foreground">
+                      <Clock className="w-4 h-4" />
+                      <span className="text-sm font-medium">已全部加载</span>
+                    </div>
+                    <div className="flex-1 h-px bg-gradient-to-l from-transparent via-border to-border"></div>
+                  </div>
+                  <p className="text-xs text-muted-foreground">
+                    共 {allArticles.length} 条{activeCategory === 'latest' ? '最新' : activeCategory === 'hot' ? '热门' : '趋势'}文章
+                  </p>
+                  <button 
+                    onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+                    className="text-xs text-primary hover:text-primary/80 transition-colors flex items-center space-x-1 mt-2"
+                  >
+                    <ChevronLeft className="w-3 h-3 rotate-90" />
+                    <span>回到顶部</span>
+                  </button>
+                </div>
+              ) : null}
             </div>
           </div>
         </section>

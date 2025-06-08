@@ -53,6 +53,39 @@ export function useArticles(params?: {
   });
 }
 
+// 使用最新文章的 Hook
+export function useLatestArticles(params?: {
+  page?: number;
+  page_size?: number;
+}) {
+  return useApiWithParams<PaginatedResponse<Article>>('/news/latest', 'GET', params, {
+    showToast: false,
+    enabled: !!params, // 只有当params存在时才请求
+  });
+}
+
+// 使用热门文章的 Hook
+export function useHotArticles(params?: {
+  page?: number;
+  page_size?: number;
+}) {
+  return useApiWithParams<PaginatedResponse<Article>>('/news/hot', 'GET', params, {
+    showToast: false,
+    enabled: !!params, // 只有当params存在时才请求
+  });
+}
+
+// 使用趋势文章的 Hook
+export function useTrendingArticles(params?: {
+  page?: number;
+  page_size?: number;
+}) {
+  return useApiWithParams<PaginatedResponse<Article>>('/news/trending', 'GET', params, {
+    showToast: false,
+    enabled: !!params, // 只有当params存在时才请求
+  });
+}
+
 // 使用特色新闻的 Hook
 export function useFeaturedArticles() {
   return useApi<Article[]>('/news/featured', 'GET', {

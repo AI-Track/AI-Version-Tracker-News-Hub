@@ -260,4 +260,175 @@ func (r *ArticleRepository) buildQuery(filter model.ArticleFilter) bson.M {
 	}
 
 	return query
+}
+
+// GetLatestArticles 获取最新文章（按发布时间排序）
+func (r *ArticleRepository) GetLatestArticles(ctx context.Context, filter model.ArticleFilter, pagination model.PaginationRequest) ([]*model.Article, *model.PaginationResponse, error) {
+	collection := r.collection
+
+	// 构建查询条件
+	query := r.buildQuery(filter)
+
+	// 计算总数
+	total, err := collection.CountDocuments(ctx, query)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	// 计算分页
+	skip := (pagination.Page - 1) * pagination.PageSize
+	totalPages := int((total + int64(pagination.PageSize) - 1) / int64(pagination.PageSize))
+
+	// 查询选项：按发布时间降序排序
+	opts := options.Find().
+		SetSort(bson.D{{"publish_date", -1}, {"created_at", -1}}).
+		SetSkip(int64(skip)).
+		SetLimit(int64(pagination.PageSize))
+
+	cursor, err := collection.Find(ctx, query, opts)
+	if err != nil {
+		return nil, nil, err
+	}
+	defer cursor.Close(ctx)
+
+	var articles []*model.Article
+	if err = cursor.All(ctx, &articles); err != nil {
+		return nil, nil, err
+	}
+
+	paginationResp := &model.PaginationResponse{
+		Page:       pagination.Page,
+		PageSize:   pagination.PageSize,
+		Total:      int(total),
+		TotalPages: totalPages,
+		HasNext:    pagination.Page < totalPages,
+		HasPrev:    pagination.Page > 1,
+	}
+
+	return articles, paginationResp, nil
+}
+
+// GetHotArticles 获取热门文章（按阅读量排序）
+func (r *ArticleRepository) GetHotArticles(ctx context.Context, filter model.ArticleFilter, pagination model.PaginationRequest) ([]*model.Article, *model.PaginationResponse, error) {
+	collection := r.collection
+
+	// 构建查询条件
+	query := r.buildQuery(filter)
+
+	// 计算总数
+	total, err := collection.CountDocuments(ctx, query)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	// 计算分页
+	skip := (pagination.Page - 1) * pagination.PageSize
+	totalPages := int((total + int64(pagination.PageSize) - 1) / int64(pagination.PageSize))
+
+	// 查询选项：按阅读量降序排序
+	opts := options.Find().
+		SetSort(bson.D{{"view_count", -1}, {"publish_date", -1}}).
+		SetSkip(int64(skip)).
+		SetLimit(int64(pagination.PageSize))
+
+	cursor, err := collection.Find(ctx, query, opts)
+	if err != nil {
+		return nil, nil, err
+	}
+	defer cursor.Close(ctx)
+
+	var articles []*model.Article
+	if err = cursor.All(ctx, &articles); err != nil {
+		return nil, nil, err
+	}
+
+	paginationResp := &model.PaginationResponse{
+		Page:       pagination.Page,
+		PageSize:   pagination.PageSize,
+		Total:      int(total),
+		TotalPages: totalPages,
+		HasNext:    pagination.Page < totalPages,
+		HasPrev:    pagination.Page > 1,
+	}
+
+	return articles, paginationResp, nil
+}
+
+// GetTrendingArticles 获取趋势文章（按综合热度排序）
+func (r *ArticleRepository) GetTrendingArticles(ctx context.Context, filter model.ArticleFilter, pagination model.PaginationRequest) ([]*model.Article, *model.PaginationResponse, error) {
+	collection := r.collection
+
+	// 构建查询条件
+	query := r.buildQuery(filter)
+
+	// 计算总数
+	total, err := collection.CountDocuments(ctx, query)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	// 计算分页
+	skip := (pagination.Page - 1) * pagination.PageSize
+	totalPages := int((total + int64(pagination.PageSize) - 1) / int64(pagination.PageSize))
+
+	// 使用聚合管道计算综合热度分数
+	pipeline := []bson.M{
+		{"$match": query},
+		{
+			"$addFields": bson.M{
+				"trending_score": bson.M{
+					"$add": []interface{}{
+						// 阅读量权重 (70%)
+						bson.M{"$multiply": []interface{}{"$view_count", 0.7}},
+						// 时间权重 (30%) - 越新的文章分数越高
+						bson.M{
+							"$multiply": []interface{}{
+								bson.M{
+									"$divide": []interface{}{
+										bson.M{
+											"$subtract": []interface{}{
+												"$$NOW",
+												bson.M{
+													"$ifNull": []interface{}{"$publish_date", "$created_at"},
+												},
+											},
+										},
+										1000 * 60 * 60 * 24, // 转换为天数
+									},
+								},
+								-0.3, // 负权重，越新分数越高
+							},
+						},
+						// 优先级权重
+						bson.M{"$multiply": []interface{}{"$priority", 10}},
+					},
+				},
+			},
+		},
+		{"$sort": bson.D{{"trending_score", -1}}},
+		{"$skip": int64(skip)},
+		{"$limit": int64(pagination.PageSize)},
+	}
+
+	cursor, err := collection.Aggregate(ctx, pipeline)
+	if err != nil {
+		return nil, nil, err
+	}
+	defer cursor.Close(ctx)
+
+	var articles []*model.Article
+	if err = cursor.All(ctx, &articles); err != nil {
+		return nil, nil, err
+	}
+
+	paginationResp := &model.PaginationResponse{
+		Page:       pagination.Page,
+		PageSize:   pagination.PageSize,
+		Total:      int(total),
+		TotalPages: totalPages,
+		HasNext:    pagination.Page < totalPages,
+		HasPrev:    pagination.Page > 1,
+	}
+
+	return articles, paginationResp, nil
 } 

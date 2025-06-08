@@ -4,6 +4,7 @@ import { toast } from "@/hooks/use-toast";
 export interface ApiResponse<T = any> {
   data: T;
   message?: string;
+  pagination?: any;
   status: number;
 }
 
@@ -122,6 +123,7 @@ class ApiClient {
       return {
         data: responseData.data || responseData,
         message: responseData.message,
+        pagination: responseData.pagination,
         status: response.status,
       };
     } catch (error) {

@@ -397,4 +397,172 @@ func (s *NewsService) clearArticleCache(articleID string) {
 	if err == nil && len(keys) > 0 {
 		s.redisClient.Del(ctx, keys...)
 	}
+
+	// 清除最新、热门、趋势缓存
+	s.redisClient.Del(ctx, "articles:latest:*", "articles:hot:*", "articles:trending:*")
+}
+
+// GetLatestArticles 获取最新文章（按发布时间排序）
+func (s *NewsService) GetLatestArticles(pagination model.PaginationRequest) ([]*model.Article, *model.PaginationResponse, error) {
+	// 设置默认分页参数
+	if pagination.Page <= 0 {
+		pagination.Page = 1
+	}
+	if pagination.PageSize <= 0 {
+		pagination.PageSize = 20
+	}
+	if pagination.PageSize > 100 {
+		pagination.PageSize = 100
+	}
+
+	// 构建缓存键
+	cacheKey := fmt.Sprintf("articles:latest:%d:%d", pagination.Page, pagination.PageSize)
+
+	// 尝试从缓存获取
+	ctx := context.Background()
+	cachedData, err := s.redisClient.Get(ctx, cacheKey).Result()
+	if err == nil {
+		var cachedResult struct {
+			Articles   []*model.Article           `json:"articles"`
+			Pagination *model.PaginationResponse `json:"pagination"`
+		}
+		if json.Unmarshal([]byte(cachedData), &cachedResult) == nil {
+			return cachedResult.Articles, cachedResult.Pagination, nil
+		}
+	}
+
+	// 从数据库获取
+	filter := model.ArticleFilter{
+		Status: "published",
+	}
+	
+	articles, paginationResp, err := s.articleRepo.GetLatestArticles(ctx, filter, pagination)
+	if err != nil {
+		return nil, nil, fmt.Errorf("获取最新文章失败: %v", err)
+	}
+
+	// 缓存结果
+	result := struct {
+		Articles   []*model.Article           `json:"articles"`
+		Pagination *model.PaginationResponse `json:"pagination"`
+	}{
+		Articles:   articles,
+		Pagination: paginationResp,
+	}
+
+	if resultData, err := json.Marshal(result); err == nil {
+		s.redisClient.Set(ctx, cacheKey, resultData, 5*time.Minute)
+	}
+
+	return articles, paginationResp, nil
+}
+
+// GetHotArticles 获取热门文章（按阅读量排序）
+func (s *NewsService) GetHotArticles(pagination model.PaginationRequest) ([]*model.Article, *model.PaginationResponse, error) {
+	// 设置默认分页参数
+	if pagination.Page <= 0 {
+		pagination.Page = 1
+	}
+	if pagination.PageSize <= 0 {
+		pagination.PageSize = 20
+	}
+	if pagination.PageSize > 100 {
+		pagination.PageSize = 100
+	}
+
+	// 构建缓存键
+	cacheKey := fmt.Sprintf("articles:hot:%d:%d", pagination.Page, pagination.PageSize)
+
+	// 尝试从缓存获取
+	ctx := context.Background()
+	cachedData, err := s.redisClient.Get(ctx, cacheKey).Result()
+	if err == nil {
+		var cachedResult struct {
+			Articles   []*model.Article           `json:"articles"`
+			Pagination *model.PaginationResponse `json:"pagination"`
+		}
+		if json.Unmarshal([]byte(cachedData), &cachedResult) == nil {
+			return cachedResult.Articles, cachedResult.Pagination, nil
+		}
+	}
+
+	// 从数据库获取
+	filter := model.ArticleFilter{
+		Status: "published",
+	}
+	
+	articles, paginationResp, err := s.articleRepo.GetHotArticles(ctx, filter, pagination)
+	if err != nil {
+		return nil, nil, fmt.Errorf("获取热门文章失败: %v", err)
+	}
+
+	// 缓存结果
+	result := struct {
+		Articles   []*model.Article           `json:"articles"`
+		Pagination *model.PaginationResponse `json:"pagination"`
+	}{
+		Articles:   articles,
+		Pagination: paginationResp,
+	}
+
+	if resultData, err := json.Marshal(result); err == nil {
+		s.redisClient.Set(ctx, cacheKey, resultData, 10*time.Minute)
+	}
+
+	return articles, paginationResp, nil
+}
+
+// GetTrendingArticles 获取趋势文章（按综合热度排序）
+func (s *NewsService) GetTrendingArticles(pagination model.PaginationRequest) ([]*model.Article, *model.PaginationResponse, error) {
+	// 设置默认分页参数
+	if pagination.Page <= 0 {
+		pagination.Page = 1
+	}
+	if pagination.PageSize <= 0 {
+		pagination.PageSize = 20
+	}
+	if pagination.PageSize > 100 {
+		pagination.PageSize = 100
+	}
+
+	// 构建缓存键
+	cacheKey := fmt.Sprintf("articles:trending:%d:%d", pagination.Page, pagination.PageSize)
+
+	// 尝试从缓存获取
+	ctx := context.Background()
+	cachedData, err := s.redisClient.Get(ctx, cacheKey).Result()
+	if err == nil {
+		var cachedResult struct {
+			Articles   []*model.Article           `json:"articles"`
+			Pagination *model.PaginationResponse `json:"pagination"`
+		}
+		if json.Unmarshal([]byte(cachedData), &cachedResult) == nil {
+			return cachedResult.Articles, cachedResult.Pagination, nil
+		}
+	}
+
+	// 从数据库获取
+	filter := model.ArticleFilter{
+		Status: "published",
+	}
+	
+	articles, paginationResp, err := s.articleRepo.GetTrendingArticles(ctx, filter, pagination)
+	if err != nil {
+		return nil, nil, fmt.Errorf("获取趋势文章失败: %v", err)
+	}
+
+	// 缓存结果
+	result := struct {
+		Articles   []*model.Article           `json:"articles"`
+		Pagination *model.PaginationResponse `json:"pagination"`
+	}{
+		Articles:   articles,
+		Pagination: paginationResp,
+	}
+
+	if resultData, err := json.Marshal(result); err == nil {
+		s.redisClient.Set(ctx, cacheKey, resultData, 15*time.Minute)
+	}
+
+	return articles, paginationResp, nil
 } 

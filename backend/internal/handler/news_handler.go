@@ -393,4 +393,112 @@ func (h *NewsHandler) SearchArticles(c *gin.Context) {
 		"pagination": paginationResp,
 		"keyword":    keyword,
 	})
+}
+
+// GetLatestArticles 获取最新文章
+// @Summary 获取最新文章
+// @Description 获取按发布时间排序的最新文章
+// @Tags 新闻
+// @Accept json
+// @Produce json
+// @Param page query int false "页码" default(1)
+// @Param page_size query int false "每页数量" default(20)
+// @Success 200 {object} map[string]interface{} "最新文章"
+// @Router /news/latest [get]
+func (h *NewsHandler) GetLatestArticles(c *gin.Context) {
+	// 解析分页参数
+	var pagination model.PaginationRequest
+	if err := c.ShouldBindQuery(&pagination); err != nil {
+		pagination.Page = 1
+		pagination.PageSize = 20
+	}
+
+	articles, paginationResp, err := h.newsService.GetLatestArticles(pagination)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"success": false,
+			"message": "获取最新文章失败",
+			"error":   err.Error(),
+		})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"success":    true,
+		"message":    "获取最新文章成功",
+		"data":       articles,
+		"pagination": paginationResp,
+	})
+}
+
+// GetHotArticles 获取热门文章
+// @Summary 获取热门文章
+// @Description 获取按阅读量排序的热门文章
+// @Tags 新闻
+// @Accept json
+// @Produce json
+// @Param page query int false "页码" default(1)
+// @Param page_size query int false "每页数量" default(20)
+// @Success 200 {object} map[string]interface{} "热门文章"
+// @Router /news/hot [get]
+func (h *NewsHandler) GetHotArticles(c *gin.Context) {
+	// 解析分页参数
+	var pagination model.PaginationRequest
+	if err := c.ShouldBindQuery(&pagination); err != nil {
+		pagination.Page = 1
+		pagination.PageSize = 20
+	}
+
+	articles, paginationResp, err := h.newsService.GetHotArticles(pagination)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"success": false,
+			"message": "获取热门文章失败",
+			"error":   err.Error(),
+		})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"success":    true,
+		"message":    "获取热门文章成功",
+		"data":       articles,
+		"pagination": paginationResp,
+	})
+}
+
+// GetTrendingArticles 获取趋势文章
+// @Summary 获取趋势文章
+// @Description 获取按综合热度排序的趋势文章
+// @Tags 新闻
+// @Accept json
+// @Produce json
+// @Param page query int false "页码" default(1)
+// @Param page_size query int false "每页数量" default(20)
+// @Success 200 {object} map[string]interface{} "趋势文章"
+// @Router /news/trending [get]
+func (h *NewsHandler) GetTrendingArticles(c *gin.Context) {
+	// 解析分页参数
+	var pagination model.PaginationRequest
+	if err := c.ShouldBindQuery(&pagination); err != nil {
+		pagination.Page = 1
+		pagination.PageSize = 20
+	}
+
+	articles, paginationResp, err := h.newsService.GetTrendingArticles(pagination)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"success": false,
+			"message": "获取趋势文章失败",
+			"error":   err.Error(),
+		})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"success":    true,
+		"message":    "获取趋势文章成功",
+		"data":       articles,
+		"pagination": paginationResp,
+	})
 } 
