@@ -5,6 +5,7 @@ import (
 	"ai-tracker-backend/internal/database"
 	"ai-tracker-backend/internal/handler"
 	"ai-tracker-backend/internal/middleware"
+	"ai-tracker-backend/internal/model"
 	"ai-tracker-backend/internal/repository"
 	"ai-tracker-backend/internal/service"
 	"log"
@@ -42,26 +43,26 @@ func main() {
 	mysqlDB := database.InitMySQL(cfg.MySQL.DSN)
 	redisClient := database.InitRedis(cfg.Redis.Addr, cfg.Redis.Password, cfg.Redis.DB)
 
+	// 数据库迁移 - 创建表结构
+	err := mysqlDB.AutoMigrate(&model.User{}, &model.NewsSource{})
+	if err != nil {
+		log.Fatal("Database migration failed:", err)
+	}
+
 	// 初始化仓储层
 	userRepo := repository.NewUserRepository(mysqlDB)
 	articleRepo := repository.NewArticleRepository(mongoDB)
-	productRepo := repository.NewProductRepository(mongoDB)
-	newsSourceRepo := repository.NewNewsSourceRepository(mysqlDB)
 
 	// 初始化服务层
 	authService := service.NewAuthService(userRepo, redisClient, cfg.JWT.Secret)
 	newsService := service.NewNewsService(articleRepo, redisClient)
-	productService := service.NewProductService(productRepo, redisClient)
-	adminService := service.NewAdminService(newsSourceRepo, userRepo)
 
 	// 初始化处理器层
 	authHandler := handler.NewAuthHandler(authService)
 	newsHandler := handler.NewNewsHandler(newsService)
-	productHandler := handler.NewProductHandler(productService)
-	adminHandler := handler.NewAdminHandler(adminService)
 
-	// 设置 Gin 路由
-	if cfg.App.Mode == "production" {
+	// 设置 Gin 模式
+	if cfg.App.Mode == "release" {
 		gin.SetMode(gin.ReleaseMode)
 	}
 
@@ -70,69 +71,57 @@ func main() {
 	router.Use(gin.Recovery())
 	router.Use(middleware.CORS())
 
+	// 健康检查
+	router.GET("/health", func(c *gin.Context) {
+		c.JSON(200, gin.H{
+			"status":  "healthy", 
+			"service": "ai-tracker-backend",
+			"version": "1.0.0",
+		})
+	})
+
 	// API 路由组
-	v1 := router.Group("/api/v1")
+	api := router.Group("/api/v1")
 
 	// 认证路由
-	authGroup := v1.Group("/auth")
+	auth := api.Group("/auth")
 	{
-		authGroup.POST("/login", authHandler.Login)
-		authGroup.POST("/logout", middleware.JWTAuth(authService), authHandler.Logout)
-		authGroup.POST("/refresh", middleware.JWTAuth(authService), authHandler.RefreshToken)
-		authGroup.GET("/profile", middleware.JWTAuth(authService), authHandler.GetProfile)
+		auth.POST("/login", authHandler.Login)
+		auth.POST("/logout", middleware.JWTAuth(authService), authHandler.Logout)
+		auth.POST("/refresh", authHandler.RefreshToken)
+		auth.GET("/profile", middleware.JWTAuth(authService), authHandler.GetProfile)
+		auth.POST("/extend", middleware.JWTAuth(authService), authHandler.ExtendSession)
+		auth.GET("/session", middleware.JWTAuth(authService), authHandler.GetSessionInfo)
 	}
 
 	// 新闻路由
-	newsGroup := v1.Group("/news")
+	news := api.Group("/news")
 	{
-		newsGroup.GET("/articles", newsHandler.GetArticles)
-		newsGroup.GET("/articles/:id", newsHandler.GetArticleByID)
-		newsGroup.GET("/featured", newsHandler.GetFeaturedArticles)
+		// 公开路由
+		news.GET("/articles", newsHandler.GetArticles)
+		news.GET("/articles/:id", newsHandler.GetArticleByID)
+		news.GET("/featured", newsHandler.GetFeaturedArticles)
+		news.GET("/search", newsHandler.SearchArticles)
+		news.GET("/categories/:category/articles", newsHandler.GetArticlesByCategory)
 		
 		// 需要认证的路由
-		newsGroup.Use(middleware.JWTAuth(authService))
-		newsGroup.POST("/articles", middleware.RequireRole("editor"), newsHandler.CreateArticle)
-		newsGroup.PUT("/articles/:id", middleware.RequireRole("editor"), newsHandler.UpdateArticle)
-		newsGroup.DELETE("/articles/:id", middleware.RequireRole("admin"), newsHandler.DeleteArticle)
-	}
-
-	// 产品路由
-	productGroup := v1.Group("/products")
-	{
-		productGroup.GET("", productHandler.GetProducts)
-		productGroup.GET("/:id", productHandler.GetProductByID)
-		productGroup.GET("/:id/versions", productHandler.GetProductVersions)
-		
-		// 需要认证的路由
-		productGroup.Use(middleware.JWTAuth(authService))
-		productGroup.POST("", middleware.RequireRole("editor"), productHandler.CreateProduct)
-		productGroup.PUT("/:id", middleware.RequireRole("editor"), productHandler.UpdateProduct)
-		productGroup.DELETE("/:id", middleware.RequireRole("admin"), productHandler.DeleteProduct)
-	}
-
-	// 管理员路由
-	adminGroup := v1.Group("/admin")
-	adminGroup.Use(middleware.JWTAuth(authService))
-	adminGroup.Use(middleware.RequireRole("editor"))
-	{
-		adminGroup.GET("/news-sources", adminHandler.GetNewsSources)
-		adminGroup.POST("/news-sources", adminHandler.CreateNewsSource)
-		adminGroup.PUT("/news-sources/:id", adminHandler.UpdateNewsSource)
-		adminGroup.DELETE("/news-sources/:id", middleware.RequireRole("admin"), adminHandler.DeleteNewsSource)
-		adminGroup.POST("/crawl/trigger", adminHandler.TriggerCrawl)
+		protected := news.Group("", middleware.JWTAuth(authService))
+		{
+			protected.POST("/articles", middleware.RequireRole("editor"), newsHandler.CreateArticle)
+			protected.PUT("/articles/:id", middleware.RequireRole("editor"), newsHandler.UpdateArticle)
+			protected.DELETE("/articles/:id", middleware.RequireRole("admin"), newsHandler.DeleteArticle)
+		}
 	}
 
 	// Swagger 文档
 	router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 
-	// 健康检查
-	router.GET("/health", func(c *gin.Context) {
-		c.JSON(200, gin.H{"status": "healthy", "service": "ai-tracker-backend"})
-	})
-
 	// 启动服务器
-	log.Printf("Server starting on port %s", cfg.App.Port)
+	log.Printf("🚀 Server starting on port %s", cfg.App.Port)
+	log.Printf("📚 API Documentation: http://localhost:%s/swagger/index.html", cfg.App.Port)
+	log.Printf("❤️  Health Check: http://localhost:%s/health", cfg.App.Port)
+	
 	if err := router.Run(":" + cfg.App.Port); err != nil {
-		log.Fatal("Failed to start server:", err)
+		log.Fatal("❌ Failed to start server:", err)
 	}
 } 

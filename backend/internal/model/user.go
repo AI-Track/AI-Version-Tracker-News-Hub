@@ -64,16 +64,4 @@ func (SystemConfig) TableName() string {
 	return "system_configs"
 }
 
-// LoginRequest 登录请求
-type LoginRequest struct {
-	Username string `json:"username" binding:"required"`
-	Password string `json:"password" binding:"required"`
-}
-
-// LoginResponse 登录响应
-type LoginResponse struct {
-	Token        string    `json:"token"`
-	RefreshToken string    `json:"refresh_token"`
-	ExpiresAt    time.Time `json:"expires_at"`
-	User         *User     `json:"user"`
-} 
+ 

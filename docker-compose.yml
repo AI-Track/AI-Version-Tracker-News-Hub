@@ -75,6 +75,6 @@ services:
       - redis_data:/data
 
 volumes:
-  mongodb_data:
+  mongodb_data: 
   mysql_data:
   redis_data: 

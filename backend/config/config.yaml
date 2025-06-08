@@ -1,0 +1,26 @@
+app:
+  name: "AI Tracker Backend"
+  port: "4000"
+  mode: "debug"
+
+mongodb:
+  uri: "mongodb://localhost:27017"
+  database: "ai_tracker"
+
+mysql:
+  host: "localhost"
+  port: "3306"
+  user: "root"
+  password: "password"
+  database: "ai_tracker"
+
+redis:
+  host: "localhost"
+  port: "6379"
+  password: ""
+  db: 0
+
+jwt:
+  secret: "your-super-secret-key-change-in-production"
+  expiry: 86400  # 24 hours
+  refresh_expiry: 604800  # 7 days 
